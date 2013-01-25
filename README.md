@@ -7,7 +7,7 @@ This repo hosts the VOMS deployment tests scripts used in the EMI3 certification
 These scripts must be executed as root on a clean SL5, SL6 or Debian6 machine with SELINUX and firewall
 disabled.
 
-The IGI test CA RPM package must be installed (you can fetch it from [1]).
+The IGI test CA RPM package must be installed.
 
 ## Clean installation 
 
@@ -31,3 +31,4 @@ then upgrade such deployment:
 [root@host ~] source emi3-setup-sl6.sh
 [root@host ~] sh emi-voms-mysql-upgrade-deployment.sh
 ```
+
