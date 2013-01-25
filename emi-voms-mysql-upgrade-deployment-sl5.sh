@@ -40,7 +40,7 @@ VOMS_DB_HOST='localhost'
 VO_TESTVO_VOMS_PORT=15000
 VO_TESTVO_VOMS_DB_USER=voms
 VO_TESTVO_VOMS_DB_PASS=pwd
-VO_TESTVO_VOMS_DB_NAME=voms_emi2to3
+VO_TESTVO_VOMS_DB_NAME=voms_testvo
 VOMS_ADMIN_SMTP_HOST=postino.cnaf.infn.it
 VOMS_ADMIN_MAIL=andrea.ceccanti@cnaf.infn.it
 EOF"
@@ -98,9 +98,14 @@ execute_cmd "yum -y update"
 # configure voms
 execute_cmd 'voms-configure install --dbtype mysql --vo testvo --dbauser root --dbapwd pwd --dbusername voms --dbpassword pwd --core-port 15001 --admin-port 15002 --smtp-host postino.cnaf.infn.it --mail-from valerio.venturi@cnaf.infn.it'
 
+# change the user under which voms run
+execute_cmd "cat > /etc/sysconfig/voms << EOF
+VOMS_USER=voms
+EOF"
+
 # start service
-execute_cmd "service voms stop"
-execute_cmd "service voms-admin stop"
+execute_cmd "service voms start"
+execute_cmd "service voms-admin start"
 
 # voms-proxy-init
 execute_cmd 'echo pass | voms-proxy-init --cert test0.cert.pem --key test0.key.pem --voms testvo --pwstdin'
