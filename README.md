@@ -14,10 +14,10 @@ The IGI test CA RPM package must be installed (you can fetch it from [1]).
 The clean installation scripts test a new VOMS installation:
 
 ```bash
-# wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi3-setup-sl6.sh
-# wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi-voms-mysql-clean-deployment.sh
-# source emi3-setup-sl6.sh
-# sh emi-voms-mysql-clean-deployment.sh
+[root@host ~] wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi3-setup-sl6.sh
+[root@host ~] wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi-voms-mysql-clean-deployment.sh
+[root@host ~] source emi3-setup-sl6.sh
+[root@host ~] sh emi-voms-mysql-clean-deployment.sh
 ```
 
 ## Upgrade installation
@@ -26,8 +26,8 @@ The upgrade installation first install & configure the latest EMI 2 VOMS release
 then upgrade such deployment:
 
 ```bash
-# wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi3-setup-sl6.sh
-# wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi-voms-mysql-clean-deployment.sh
-# source emi3-setup-sl6.sh
-# sh emi-voms-mysql-upgrade-deployment.sh
+[root@host ~] wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi3-setup-sl6.sh
+[root@host ~] wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi-voms-mysql-clean-deployment.sh
+[root@host ~] source emi3-setup-sl6.sh
+[root@host ~] sh emi-voms-mysql-upgrade-deployment.sh
 ```
