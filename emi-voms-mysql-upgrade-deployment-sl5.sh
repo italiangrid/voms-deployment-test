@@ -1,12 +1,9 @@
 #!/bin/bash
  
-
 # This script execute an upgrade deployment of the emi-voms-mysql package.
 #
 # It installs the EMI-3 version over the last update of EMI-2.
 #
-
-export PATH="/usr/sbin:$PATH"
 
 execute_cmd() {
   echo [root@`hostname` ~]# $1
@@ -96,12 +93,15 @@ execute_cmd "yum -y install emi-voms-mysql"
 execute_cmd "yum -y update"
 
 # configure voms
-execute_cmd 'voms-configure install --dbtype mysql --vo testvo --dbauser root --dbapwd pwd --dbusername voms --dbpassword pwd --core-port 15001 --admin-port 15002 --smtp-host postino.cnaf.infn.it --mail-from valerio.venturi@cnaf.infn.it'
+execute_cmd 'voms-configure install --dbtype mysql --vo testvo --dbauser root --dbapwd pwd --dbusername voms --dbpassword pwd --core-port 15000 --admin-port 16000 --smtp-host postino.cnaf.infn.it --mail-from valerio.venturi@cnaf.infn.it'
 
 # change the user under which voms run
 execute_cmd "cat > /etc/sysconfig/voms << EOF
 VOMS_USER=voms
 EOF"
+
+# remove log file owned by root
+execute_cmd "rm -f /var/log/voms/voms.testvo"
 
 # start service
 execute_cmd "service voms start"
