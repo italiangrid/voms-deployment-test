@@ -13,7 +13,7 @@ voms_repo=$DEFAULT_VOMS_REPO
 emi_repo_filename="/etc/yum.repos.d/test_emi.repo"
 voms_repo_filename="/etc/yum.repos.d/test_voms.repo"
 
-populate_vo_script_url="tbd"
+populate_vo_script_url="https://raw.github.com/valerioventuri/voms-deployment-test/master/populate-vo.sh"
 
 hostname=$(hostname -f)
 vo=emi3
