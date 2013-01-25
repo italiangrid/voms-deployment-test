@@ -67,7 +67,7 @@ execute 'sleep 10'
 execute "voms-admin --vo $vo list-groups"
  
 # populate vo
-execute "wget --no-check-certificate populate_vo_script_url"
+execute "wget --no-check-certificate $populate_vo_script_url"
 execute "sh populate-vo.sh $vo"
 
 # Stop the services
