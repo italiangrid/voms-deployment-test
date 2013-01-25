@@ -5,7 +5,7 @@
 #
 set -e
 
-emi_release_package="http://emisoft.web.cern.ch/emisoft/dist/EMI/2/sl6/x86_64/base/emi-release-2.0.0-1.sl6.noarch.rpm"
+emi_release_package=$DEFAULT_EMI2_RELEASE_PACKAGE
 
 emi_repo=$DEFAULT_EMI_REPO
 voms_repo=$DEFAULT_VOMS_REPO
@@ -23,6 +23,7 @@ tomcat=tomcat6
 [ $# -eq 1 ] && emi_repo=$1
 [ $# -eq 2 ] && voms_repo=$2
 
+[ -z "$emi_release_package" ] && ( echo "Please set the DEFAULT_EMI2_RELEASE_PACKAGE env variable!"; exit 1 )
 [ -z "$emi_repo" ]  && ( echo "Usage: $0 EMI_REPO_URL [VOMS_REPO_URL]"; exit 1 )
 
 execute() {
@@ -32,7 +33,7 @@ execute() {
  
 execute "mkdir emi-release-package"
 execute "wget -P emi-release-package $emi_release_package"
-xecute "yum -y localinstall emi-release-package/*.rpm"
+execute "yum -y localinstall emi-release-package/*.rpm"
 execute "yum clean all"
 execute "yum -y install emi-voms-mysql"
 execute "yum -y install xml-commons-apis"
