@@ -35,7 +35,7 @@ execute "wget -q $emi_repo -O $emi_repo_filename"
 
 if [ ! -z "$voms_repo" ]; then
     execute "wget -q $voms_repo -O $voms_repo_filename"
-    execute "echo '\npriority=1' >> $voms_repo_filename"
+    execute "echo >> $voms_repo_filename; echo 'priority=1' >> $voms_repo_filename"
 fi
 
 # Clean yum database
