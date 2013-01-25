@@ -17,6 +17,7 @@ populate_vo_script_url="https://raw.github.com/valerioventuri/voms-deployment-te
 
 hostname=$(hostname -f)
 vo=emi3
+yaim_vo=$(echo $vo | tr '.' '_' | tr '-' '_' | tr '[a-z]' '[A-Z]') 
 mail_from=andrea.ceccanti@cnaf.infn.it
 tomcat=tomcat6
 
@@ -50,10 +51,10 @@ SITE_NAME="voms-certification.cnaf.infn.it"
 VOS="$vo"
 VOMS_HOST=$hostname
 VOMS_DB_HOST='localhost'
-VO_TESTVO_VOMS_PORT=15000
-VO_TESTVO_VOMS_DB_USER=${vo}_vo
-VO_TESTVO_VOMS_DB_PASS=pwd
-VO_TESTVO_VOMS_DB_NAME=voms_${vo}
+VO_${yaim_vo}_VOMS_PORT=15000
+VO_${yaim_vo}_VOMS_DB_USER=${vo}_vo
+VO_${yaim_vo}_VOMS_DB_PASS=pwd
+VO_${yaim_vo}_VOMS_DB_NAME=voms_${vo}
 VOMS_ADMIN_SMTP_HOST=postino.cnaf.infn.it
 VOMS_ADMIN_MAIL=andrea.ceccanti@cnaf.infn.it
 EOF"
