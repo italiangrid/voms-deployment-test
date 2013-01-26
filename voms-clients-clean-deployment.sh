@@ -19,7 +19,7 @@ execute() {
   eval "$1" || ( echo "Deployment failed"; exit 1 )
 }
 
-echo "voms-clients 2.x clean deployment test"
+echo "$clients_package clean deployment test"
 echo "EMI repo URL: $emi_repo"
 if [ ! -z "$voms_repo" ]; then
     echo "VOMS repo URL: $voms_repo"
