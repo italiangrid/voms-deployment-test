@@ -8,9 +8,11 @@ voms_repo=$DEFAULT_VOMS_REPO
 emi_repo_filename="/etc/yum.repos.d/test_emi.repo"
 voms_repo_filename="/etc/yum.repos.d/test_voms.repo"
 hostname=$(hostname -f)
+clients_package=
 
-[ -z "$emi_repo" ]  && ( echo "Usage: $0 EMI_REPO_URL VOMS_CLIENTS_PACKAGE"; exit 1 )
-[ -z "$clients_package" ] && ( echo "Usage: $0 EMI_REPO_URL VOMS_CLIENTS_PACKAGE"; exit 1 )
+[ $# -eq 1 ] && clients_package=$1
+[ -z "$emi_repo" ]  && ( echo "Please set the DEFAULT_EMI_REPO env variable!"; exit 1 )
+[ -z "$clients_package" ] && ( echo "Usage: $0 <clients_package>"; exit 1 )
 
 execute() {
   echo "[root@`hostname` ~]# $1"
