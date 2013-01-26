@@ -113,13 +113,6 @@ execute "service voms start"
 
 execute "sleep 20"
 
-# Install clients
-execute "yum -y install voms-clients3"
-
-# Configure lsc and vomses
-if [ ! -d "/etc/vomses" ]; then
-        execute "mkdir /etc/vomses"
-fi
 
 # Install voms clients
 execute "yum -y install voms-clients3"
@@ -133,9 +126,17 @@ execute "chmod 400 .globus/userkey.pem"
 
 # Setup vomsdir & vomses
 # Configure lsc and vomses
-execute "mkdir /etc/vomses"
+# Configure lsc and vomses
+if [ ! -d "/etc/vomses" ]; then
+        execute "mkdir /etc/vomses"
+fi
+
 execute "cp /etc/voms-admin/$vo/vomses /etc/vomses/$vo"
-execute "mkdir /etc/grid-security/vomsdir/$vo"
+
+if [ ! -d "/etc/grid-security/vomsdir/$vo" ]; then
+        execute "mkdir /etc/grid-security/vomsdir/$vo"
+fi
+
 execute "cp /etc/voms-admin/$vo/lsc /etc/grid-security/vomsdir/$vo/$hostname.lsc"
 
 # VOMS proxy init test
