@@ -50,6 +50,6 @@ execute "chmod 600 .globus/usercert.pem"
 execute "chmod 400 .globus/userkey.pem"
 
 # test basic voms-proxy-init command
-execute "echo 'pass' | voms-proxy-init --pwstdin"
+execute "echo 'pass' | voms-proxy-init --pwstdin --cert .globus/usercert.pem --key .globus/userkey.pem"
 
 echo "VOMS clients succesfully deployed"
