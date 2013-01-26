@@ -14,10 +14,7 @@ hostname=$(hostname -f)
 vo=emi3
 mail_from=andrea.ceccanti@cnaf.infn.it
 
-[ $# -eq 1 ] && emi_repo=$1
-[ $# -eq 2 ] && voms_repo=$2
-
-[ -z "$emi_repo" ]  && ( echo "Usage: $0 EMI_REPO_URL [VOMS_REPO_URL]"; exit 1 )
+[ -z "$emi_repo" ]  && ( echo "Please set the DEFAULT_EMI_REPO env variable!"; exit 1 )
 
 execute() {
   echo "[root@`hostname` ~]# $1"
