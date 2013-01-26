@@ -44,4 +44,4 @@ execute "yum -y update"
 
 execute "yum -y install voms-api-java3"
 
-echo "VOMS clients succesfully upgraded!"
+echo "VOMS API Java succesfully upgraded!"
