@@ -36,7 +36,7 @@ execute "cp /usr/share/igi-test-ca/test0.key.pem .globus/userkey.pem"
 execute "chmod 600 .globus/usercert.pem"
 execute "chmod 400 .globus/userkey.pem"
 
-execute "echo pass | voms-proxy-init --pwstdin"
+execute "echo pass | voms-proxy-init --pwstdin --cert .globus/usercert.pem --key .globus/userkey.pem"
 
 # Remove emi-release package
 execute "yum -y remove emi-release"
@@ -55,6 +55,6 @@ execute "yum clean all"
 execute "yum -y install emi-release"
 execute "yum -y update"
 
-execute "echo pass | voms-proxy-init --pwstdin"
+execute "echo pass | voms-proxy-init --pwstdin --cert .globus/usercert.pem --key .globus/userkey.pem"
 
 echo "VOMS clients succesfully upgraded!"
