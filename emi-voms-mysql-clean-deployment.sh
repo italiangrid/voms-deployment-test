@@ -71,6 +71,9 @@ execute 'voms-config-info-providers -s local -e'
  
 # start bdii
 execute 'service bdii start'
+
+# Run fetch-crl
+execute "fetch-crl"
  
 # start voms
 execute 'service voms start'
