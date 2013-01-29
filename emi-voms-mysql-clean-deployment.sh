@@ -66,6 +66,9 @@ voms_configure_cmd="voms-configure install --vo $vo \
  
 execute "$voms_configure_cmd"
 
+# Install INFN CA
+execute "yum -y install ca_INFN-CA-2006"
+
 # Configure info providers
 execute 'voms-config-info-providers -s local -e'
  
