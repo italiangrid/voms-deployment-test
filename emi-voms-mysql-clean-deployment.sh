@@ -73,7 +73,7 @@ execute 'voms-config-info-providers -s local -e'
 execute 'service bdii start'
 
 # Run fetch-crl
-execute "fetch-crl"
+execute "fetch-crl -o /etc/grid-security/certificates -l /etc/grid-security/certificates"
  
 # start voms
 execute 'service voms start'
