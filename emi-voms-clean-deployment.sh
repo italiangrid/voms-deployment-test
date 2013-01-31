@@ -73,6 +73,7 @@ configure_vo_oracle(){
     --deploy-database \
     --dbusername admin_25 \
     --dbpassword $ORACLE_PASSWORD \
+    --mail-from $mail_from \
     --smtp-host postino.cnaf.infn.it"
 
     execute "$voms_configure_cmd"
