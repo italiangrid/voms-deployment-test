@@ -19,8 +19,9 @@ mail_from=andrea.ceccanti@cnaf.infn.it
 [ -z "$emi_repo" ]  && ( echo "Please set the DEFAULT_EMI_REPO env variable!"; exit 1 )
 [ -z "$voms_mp" ] && ( echo "Please set the VOMS_METAPACKAGE env variable!"; exit 1)
 
-[ "$voms_mp" = "emi-voms-oracle" && -z "$oracle_password" ] && \
-    ( echo "Please set the ORACLE_PASSWORD env variable!"; exit 1) 
+if [ "$voms_mp" = "emi-voms-oracle" ]; then
+    [ -z "$oracle_password" ] && ( echo "Please set the ORACLE_PASSWORD env variable!"; exit 1)
+fi
 
 setup_mysql_db(){
 
