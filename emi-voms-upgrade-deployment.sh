@@ -36,6 +36,19 @@ execute() {
 }
  
 setup_oracle_db(){
+    # Install emi devel oracle repo
+
+    cat > oracle.repo << EOF
+[Oracle]
+name=Oracle Repository (not for distribution)
+baseurl=http://emisoft.web.cern.ch/emisoft/dist/elcaro/oracle-instantclient/10.2.0.4/repo/sl5/$basearch
+protect=1
+enabled=1
+priority=2
+gpgcheck=0
+EOF
+    execute "cp oracle.repo /etc/yum.repos.d"
+
     # Install oracle instantclients
     execute "yum -y install oracle-instantclient-basic"
 }
