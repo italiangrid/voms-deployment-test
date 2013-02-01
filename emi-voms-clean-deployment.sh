@@ -34,6 +34,8 @@ setup_mysql_db(){
 }
 
 setup_oracle_db(){
+    # Install oracle instantclients
+    execute "yum -y install oracle-instantclient-basic"
     # Configure TNS names ora 
     execute "cat > tnsnames.ora << EOF
     VOMSDB2=(DESCRIPTION =
