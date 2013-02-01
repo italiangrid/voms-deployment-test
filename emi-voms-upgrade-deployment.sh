@@ -41,7 +41,7 @@ setup_oracle_db(){
     cat > oracle.repo << EOF
 [Oracle]
 name=Oracle Repository (not for distribution)
-baseurl=http://emisoft.web.cern.ch/emisoft/dist/elcaro/oracle-instantclient/10.2.0.4/repo/sl5/$basearch
+baseurl=http://emisoft.web.cern.ch/emisoft/dist/elcaro/oracle-instantclient/10.2.0.4/repo/$oracle_dist
 protect=1
 enabled=1
 priority=2
