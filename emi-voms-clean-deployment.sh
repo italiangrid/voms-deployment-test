@@ -81,6 +81,7 @@ configure_vo_oracle(){
     --smtp-host postino.cnaf.infn.it"
 
     execute "$voms_configure_cmd"
+    execute "echo >> /etc/sysconfig/voms; echo 'TNS_ADMIN=/etc/voms' >> /etc/sysconfig/voms" 
 }
 
 execute_no_check(){
