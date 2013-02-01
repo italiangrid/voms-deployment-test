@@ -36,15 +36,16 @@ setup_mysql_db(){
 setup_oracle_db(){
     # Install oracle instantclients
     execute "yum -y install oracle-instantclient-basic"
+
     # Configure TNS names ora 
-    execute "cat > tnsnames.ora << EOF
-    VOMSDB2=(DESCRIPTION =
+    cat > tnsnames.ora << EOF
+voms=(DESCRIPTION =
         (ADDRESS_LIST =
         (ADDRESS = (PROTOCOL = TCP)(HOST = voms-db-02.cr.cnaf.infn.it)(PORT = 1521)))
         (CONNECT_DATA = (SERVICE_NAME = vomsdb2.cr.cnaf.infn.it))
     )
-    EOF"
-    
+EOF
+     
     execute "cp tnsnames.ora /etc/voms"
 }
 
@@ -72,6 +73,7 @@ configure_vo_oracle(){
     --core-port 15000 \
     --hostname $hostname \
     --dbtype oracle \
+    --dbname voms \
     --deploy-database \
     --dbusername admin_25 \
     --dbpassword $ORACLE_PASSWORD \
