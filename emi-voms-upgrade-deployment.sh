@@ -29,6 +29,7 @@ tomcat=tomcat6
 
 if [ "$voms_mp" = "emi-voms-oracle" ]; then
     [ -z "$oracle_password" ] && ( echo "Please set the ORACLE_PASSWORD env variable!"; exit 1)
+    [ -z "$oracle_dist" ] && ( echo "Please set the ORACLE_DIST env variable!"; exit 1)
 fi
 
 execute() {
