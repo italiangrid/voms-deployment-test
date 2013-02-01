@@ -11,6 +11,7 @@ emi_repo=$DEFAULT_EMI_REPO
 voms_repo=$DEFAULT_VOMS_REPO
 voms_mp=$VOMS_METAPACKAGE
 oracle_password=$ORACLE_PASSWORD
+oracle_dist=$ORACLE_DIST
 
 emi_repo_filename="/etc/yum.repos.d/test_emi.repo"
 voms_repo_filename="/etc/yum.repos.d/test_voms.repo"
