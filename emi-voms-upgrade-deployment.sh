@@ -53,6 +53,7 @@ EOF
 
     # Install oracle instantclients
     execute "yum -y install oracle-instantclient-basic"
+	execute "yum -y install $STDCPP_COMPAT_PACKAGE"
 }
 
 setup_mysql_db(){
@@ -158,6 +159,7 @@ execute '/opt/glite/yaim/bin/yaim -c -s siteinfo/site-info.def -n VOMS'
 
 # Ensure empty oracle db is in place
 if [ "$voms_mp" = "emi-voms-oracle" ]; then
+	execute "source /etc/profile.d/grid-env.sh"
 	execute "voms-db-deploy.py undeploy --vo $vo"
 	execute "voms-db-deploy.py deploy --vo $vo"
 	execute "voms-db-deploy.py add-admin --vo $vo --cert /etc/grid-security/hostcert.pem"

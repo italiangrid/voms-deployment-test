@@ -7,6 +7,7 @@ export DEFAULT_VOMS_REPO=http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_
 # Do MySQL deployment tests by default
 export VOMS_METAPACKAGE=emi-voms-mysql
 
+export STDCPP_COMPAT_PACKAGE=compat-libstdc++-33
 # Fill the env below with oracle account password
 # export ORACLE_PASSWORD=
 
