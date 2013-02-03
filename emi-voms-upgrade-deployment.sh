@@ -122,7 +122,7 @@ reconfigure_oracle_vo(){
 #!/bin/bash
 hostname=$(hostname -f)
 voms-configure install --vo $vo \
---db-type oracle \
+--dbtype oracle \
 --core-port 15000 \
 --admin-port 16000 \
 --hostname $hostname \
