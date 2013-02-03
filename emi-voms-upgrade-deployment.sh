@@ -156,6 +156,13 @@ fi
 
 execute '/opt/glite/yaim/bin/yaim -c -s siteinfo/site-info.def -n VOMS'
 
+# Ensure empty oracle db is in place
+if [ "$voms_mp" = "emi-voms-oracle" ]; then
+	execute "voms-db-deploy.py undeploy --vo $vo"
+	execute "voms-db-deploy.py deploy --vo $vo"
+	execute "voms-db-deploy.py add-admin --vo $vo --cert /etc/grid-security/hostcert.pem"
+fi
+
 # wait a while
 execute 'sleep 10'
  
