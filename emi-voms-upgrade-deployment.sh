@@ -191,6 +191,12 @@ if [ ! -z "$voms_repo" ]; then
     execute "echo >> $voms_repo_filename; echo 'priority=1' >> $voms_repo_filename"
 fi
 
+# Remove 10.2 Oracle repo in favour of 11.2 that comes with EMI3
+# testing repo
+if [ "$voms_mp" = "emi-voms-oracle" ]; then
+    execute "rm -f /etc/yum.repos.d/oracle.repo"
+fi
+
 # clean yum
 execute "yum clean all"
 
