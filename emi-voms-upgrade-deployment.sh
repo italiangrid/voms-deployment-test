@@ -22,10 +22,11 @@ hostname=$(hostname -f)
 vo=emi3
 yaim_vo=$(echo $vo | tr '.' '_' | tr '-' '_' | tr '[a-z]' '[A-Z]') 
 mail_from=andrea.ceccanti@cnaf.infn.it
-tomcat=tomcat6
+tomcat=$TOMCAT_PACKAGE
 
 [ -z "$emi_release_package" ] && ( echo "Please set the DEFAULT_EMI2_RELEASE_PACKAGE env variable!"; exit 1 )
 [ -z "$emi_repo" ]  && ( echo "Please set the DEFAULT_EMI_REPO env variable!"; exit 1 )
+[ -z "$tomcat" ] && ( echo "Please set the TOMCAT_PACKAGE env variable!"; exit 1)
 
 if [ "$voms_mp" = "emi-voms-oracle" ]; then
     [ -z "$oracle_password" ] && ( echo "Please set the ORACLE_PASSWORD env variable!"; exit 1)

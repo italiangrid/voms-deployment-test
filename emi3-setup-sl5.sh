@@ -11,5 +11,6 @@ export VOMS_METAPACKAGE=emi-voms-mysql
 # export ORACLE_PASSWORD=
 
 export STDCPP_COMPAT_PACKAGE=compat-libstdc++-33
+export TOMCAT_PACKAGE=tomcat5
 
 export ORACLE_DIST=sl5/x86_64
