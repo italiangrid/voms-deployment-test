@@ -9,3 +9,7 @@ export VOMS_METAPACKAGE=emi-voms-mysql
 
 # Fill the env below with oracle account password
 # export ORACLE_PASSWORD=
+
+export STDCPP_COMPAT_PACKAGE=compat-libstdc++-33
+
+export ORACLE_DIST=sl5/x86_64
