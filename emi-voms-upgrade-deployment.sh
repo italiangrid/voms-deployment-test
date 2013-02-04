@@ -212,6 +212,15 @@ fi
 
 execute "sh reconfigure-voms.sh"
 execute "service voms-admin start"
+
+if [ "$voms_mp" = "emi-voms-oracle" ]; then
+    cat > sysconfig.voms << EOF
+VOMS_USER=voms
+TNS_ADMIN=/etc/voms
+EOF
+    execute "cp sysconfig.voms /etc/sysconfig/voms"
+fi
+
 execute "service voms start"
 
 execute "sleep 20"
