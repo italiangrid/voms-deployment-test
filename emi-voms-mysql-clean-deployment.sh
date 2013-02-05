@@ -72,6 +72,9 @@ execute "yum -y install ca_INFN-CA-2006"
 # Configure info providers
 execute 'voms-config-info-providers -s local -e'
  
+# bdii needs slapd2.4 to work
+execute 'sed -i 's/slapd/slapd2.4/g' /etc/sysconfig/bdii
+
 # start bdii
 execute 'service bdii start'
 
