@@ -255,4 +255,7 @@ execute "cp /etc/voms-admin/$vo/lsc /etc/grid-security/vomsdir/$vo/$hostname.lsc
 # VOMS proxy init test
 execute "echo 'pass' | voms-proxy-init -voms $vo --pwstdin --debug"
 
+# Start vomses service
+execute "service vomses start"
+
 echo "VOMS succesfully upgraded!"
