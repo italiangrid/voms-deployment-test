@@ -9,26 +9,25 @@ disabled.
 
 The IGI test CA RPM package must be installed.
 
-## Clean installation 
+## Deployment tests 
 
 The clean installation scripts test a new VOMS installation:
 
 ```bash
 [root@host ~] wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi3-setup-sl6.sh
-[root@host ~] wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi-voms-mysql-clean-deployment.sh
-[root@host ~] source emi3-setup-sl6.sh
-[root@host ~] sh emi-voms-mysql-clean-deployment.sh
+[root@host ~] wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi-voms-clean-deployment.sh
 ```
 
-## Upgrade installation
+Change preferences in the `emi3-setup.sl6.sh` depending on the deployment that you're testing (emi-voms-mysql vs emi-voms-oracle)
+and issue the following commands:
 
-The upgrade installation first install & configure the latest EMI 2 VOMS release and
-then upgrade such deployment:
+```
+[root@host ~] source emi3-setup-sl6.sh
+[root@host ~] sh emi-voms-clean-deployment.sh
+```
+
+Follow the same instructions for the upgrade and run the following command:
 
 ```bash
-[root@host ~] wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi3-setup-sl6.sh
-[root@host ~] wget --no-check-certificate https://raw.github.com/valerioventuri/voms-deployment-test/master/emi-voms-mysql-clean-deployment.sh
-[root@host ~] source emi3-setup-sl6.sh
 [root@host ~] sh emi-voms-mysql-upgrade-deployment.sh
 ```
-
