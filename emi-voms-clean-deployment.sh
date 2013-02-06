@@ -2,7 +2,8 @@
  
 # This script execute a clean deployment test of the emi-voms-mysql package.
 #
-set -e
+trap "exit 1" TERM
+export TOP_PID=$$
 
 emi_repo=$DEFAULT_EMI_REPO
 voms_repo=$DEFAULT_VOMS_REPO
@@ -94,6 +95,13 @@ execute_no_check(){
 execute() {
   echo "[root@`hostname` ~]# $1"
   eval "$1" || ( echo "Deployment failed"; exit 1 )
+
+  exit_status=$?
+
+  if [ $exit_status -ne 0 ]; then
+		echo "Deployment failed"; 
+		kill -s TERM $TOP_PID
+  fi
 }
 
 echo "emi-voms-mysql clean deployment test"
