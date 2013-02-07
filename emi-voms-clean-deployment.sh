@@ -48,6 +48,8 @@ voms=(DESCRIPTION =
 EOF
      
     execute "cp tnsnames.ora /etc/voms"
+	execute "mkdir -p /usr/lib64/oracle/11.2.0.3.0/client/lib64/log/diag/clients"
+	execute "chmod 777 /usr/lib64/oracle/11.2.0.3.0/client/lib64/log/diag/clients"
 }
 
 configure_vo_mysql(){
