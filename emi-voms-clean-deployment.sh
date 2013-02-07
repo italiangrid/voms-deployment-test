@@ -96,14 +96,15 @@ execute_no_check(){
 
 execute() {
   echo "[root@`hostname` ~]# $1"
-  eval "$1" || ( echo "Deployment failed"; exit 1 )
+  eval "$1"
 
   exit_status=$?
 
   if [ $exit_status -ne 0 ]; then
-		echo "Deployment failed"; 
-		kill -s TERM $TOP_PID
+	echo "Deployment failed"; 
+	kill -s TERM $TOP_PID
   fi
+
 }
 
 echo "emi-voms-mysql clean deployment test"
