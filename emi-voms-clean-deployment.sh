@@ -5,6 +5,8 @@
 trap "exit 1" TERM
 export TOP_PID=$$
 
+platform=$PLATFORM
+
 emi_repo=$DEFAULT_EMI_REPO
 voms_repo=$DEFAULT_VOMS_REPO
 voms_mp=$VOMS_METAPACKAGE
@@ -149,8 +151,10 @@ execute "yum -y install ca_INFN-CA-2006"
 execute 'voms-config-info-providers -s local -e'
  
 # bdii needs ldap2.4 on SL5
-execute 'sed -i "s/slapd/slapd2.4/g" /etc/sysconfig/bdii'
-execute 'sed -i "s/^#SLAPD=/SLAPD=/g" /etc/sysconfig/bdii'
+if [ "$platform" = "SL5" ]; then
+	execute 'sed -i "s/slapd/slapd2.4/g" /etc/sysconfig/bdii'
+	execute 'sed -i "s/^#SLAPD=/SLAPD=/g" /etc/sysconfig/bdii'
+fi
 
 # start bdii
 execute 'service bdii start'
