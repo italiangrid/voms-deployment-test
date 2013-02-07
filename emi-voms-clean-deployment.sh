@@ -182,10 +182,13 @@ execute "mkdir /etc/grid-security/vomsdir/$vo"
 execute "cp /etc/voms-admin/$vo/lsc /etc/grid-security/vomsdir/$vo/$hostname.lsc"
 
 # VOMS proxy init test
-execute "echo 'pass' | voms-proxy-init -voms $vo --pwstdin --debug"
+execute "echo 'pass' | voms-proxy-init -voms $vo --pwstdin"
 
+for i in `seq 1 10`; do
+    execute "voms-proxy-init -voms $vo -noregen"
+done
+    
 # Start vomses index application
-
 execute "service vomses start"
 
 echo "VOMS succesfully deployed!"
