@@ -17,6 +17,8 @@ hostname=$(hostname -f)
 vo=emi3
 mail_from=andrea.ceccanti@cnaf.infn.it
 
+populate_vo_script_url="https://raw.github.com/valerioventuri/voms-deployment-test/master/populate-vo.sh"
+
 [ -z "$emi_repo" ]  && ( echo "Please set the DEFAULT_EMI_REPO env variable!"; exit 1 )
 [ -z "$voms_mp" ] && ( echo "Please set the VOMS_METAPACKAGE env variable!"; exit 1)
 
@@ -162,8 +164,9 @@ execute 'sleep 30'
 # check voms-admin can list groups
 execute "voms-admin --vo $vo list-groups"
  
-# create test user
-execute "voms-admin --vo $vo create-user /usr/share/igi-test-ca/test0.cert.pem"
+# populate vo
+execute "wget --no-check-certificate $populate_vo_script_url"
+execute "sh populate-vo.sh $vo"
 
 # Install voms clients
 execute "yum -y install voms-clients3"
