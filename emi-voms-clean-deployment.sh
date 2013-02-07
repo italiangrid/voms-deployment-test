@@ -148,6 +148,10 @@ execute "yum -y install ca_INFN-CA-2006"
 # Configure info providers
 execute 'voms-config-info-providers -s local -e'
  
+# bdii needs ldap2.4 on SL5
+execute 'sed -i "s/slapd/slapd2.4/g" /etc/sysconfig/bdii'
+execute 'sed -i "s/^#SLAPD=/SLAPD=/g" /etc/sysconfig/bdii'
+
 # start bdii
 execute 'service bdii start'
 
