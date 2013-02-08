@@ -14,6 +14,13 @@ clients_package=
 [ -z "$emi_repo" ]  && ( echo "Please set the DEFAULT_EMI_REPO env variable!"; exit 1 )
 [ -z "$clients_package" ] && ( echo "Usage: $0 <clients_package>"; exit 1 )
 
+
+configure_vomsdir(){
+
+  execute "mkdir /etc/grid-security/vomsdir"
+  execute "cp /etc/grid-security/hostcert.pem /etc/grid-security/vomsdir"
+}
+
 execute() {
   echo "[root@`hostname` ~]# $1"
   eval "$1" || ( echo "Deployment failed"; exit 1 )
@@ -49,7 +56,7 @@ execute "cp /usr/share/igi-test-ca/test0.key.pem .globus/userkey.pem"
 execute "chmod 600 .globus/usercert.pem"
 execute "chmod 400 .globus/userkey.pem"
 
-execute "mkdir /etc/grid-security/vomsdir"
+configure_vomsdir
 
 # test basic voms-proxy-init command
 execute "echo 'pass' | voms-proxy-init --pwstdin --cert .globus/usercert.pem --key .globus/userkey.pem"
