@@ -17,7 +17,7 @@ clients_package=
 
 configure_vomsdir(){
 
-  execute "mkdir /etc/grid-security/vomsdir"
+  execute "mkdir -p /etc/grid-security/vomsdir"
   execute "cp /etc/grid-security/hostcert.pem /etc/grid-security/vomsdir"
 }
 
