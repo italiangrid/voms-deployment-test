@@ -226,6 +226,9 @@ execute "service voms start"
 
 execute "sleep 20"
 
+# start bdii
+execute 'service bdii stop'
+
 # Configure info providers
 execute 'voms-config-info-providers -s local -e'
 
@@ -236,7 +239,7 @@ if [ "$platform" = "SL5" ]; then
 fi
 
 # start bdii
-execute 'service bdii restart'
+execute 'service bdii start'
 
 # Install voms clients
 execute "yum -y install voms-clients3"
