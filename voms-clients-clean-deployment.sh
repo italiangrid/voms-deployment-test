@@ -49,6 +49,8 @@ execute "cp /usr/share/igi-test-ca/test0.key.pem .globus/userkey.pem"
 execute "chmod 600 .globus/usercert.pem"
 execute "chmod 400 .globus/userkey.pem"
 
+execute "mkdir /etc/grid-security/vomsdir"
+
 # test basic voms-proxy-init command
 execute "echo 'pass' | voms-proxy-init --pwstdin --cert .globus/usercert.pem --key .globus/userkey.pem"
 
