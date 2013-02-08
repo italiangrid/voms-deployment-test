@@ -226,6 +226,17 @@ execute "service voms start"
 
 execute "sleep 20"
 
+# Configure info providers
+execute 'voms-config-info-providers -s local -e'
+
+# bdii needs ldap2.4 on SL5
+if [ "$platform" = "SL5" ]; then
+	execute 'sed -i "s/slapd/slapd2.4/g" /etc/sysconfig/bdii'
+	execute 'sed -i "s/^#SLAPD=/SLAPD=/g" /etc/sysconfig/bdii'
+fi
+
+# start bdii
+execute 'service bdii restart'
 
 # Install voms clients
 execute "yum -y install voms-clients3"
