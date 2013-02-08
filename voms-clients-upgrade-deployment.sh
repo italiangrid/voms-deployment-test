@@ -23,6 +23,11 @@ execute() {
   eval "$1" || ( echo "Deployment failed"; exit 1 )
 }
  
+configure_vomsdir(){
+  execute "mkdir -p /etc/grid-security/vomsdir"
+  execute "cp /etc/grid-security/hostcert.pem /etc/grid-security/vomsdir"
+}
+
 execute "mkdir emi-release-package"
 execute "wget -P emi-release-package $emi_release_package"
 execute "yum -y localinstall emi-release-package/*.rpm"
@@ -59,6 +64,7 @@ if [ "$clients_package" = "voms-clients" ]; then
 else
   execute "yum -y remove voms-clients"
   execute "yum -y install voms-clients3"
+  configure_vomsdir
 fi
 
 
