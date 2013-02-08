@@ -27,7 +27,7 @@ execute "mkdir emi-release-package"
 execute "wget -P emi-release-package $emi_release_package"
 execute "yum -y localinstall emi-release-package/*.rpm"
 execute "yum clean all"
-execute "yum -y install $clients_package"
+execute "yum -y install voms-clients"
 
 # Setup certificate for voms-proxy-init test
 execute "mkdir -p .globus"
@@ -53,7 +53,14 @@ fi
 execute "yum clean all"
 
 execute "yum -y install emi-release"
-execute "yum -y update"
+
+if [ "$clients_package" = "voms-clients" ]; then
+  execute "yum -y update";
+else
+  execute "yum -y remove voms-clients"
+  execute "yum -y install voms-clients3"
+fi
+
 
 execute "echo pass | voms-proxy-init --pwstdin --cert .globus/usercert.pem --key .globus/userkey.pem"
 
