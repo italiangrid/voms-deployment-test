@@ -56,11 +56,14 @@ EOF
     execute "chmod 777 /usr/lib64/oracle/11.2.0.3.0/client/lib64/log/diag/clients"
 }
 
+configure_container() {
+    execute "sed -i -e \"s#localhost#$hostname#g\" /etc/voms-admin/voms-admin-server.properties"
+}
+
 configure_vo_mysql(){
     # Configure voms
 
     voms_configure_cmd="voms-configure install --vo $vo \
-    --admin-port 16000  \
     --core-port 15000 \
     --hostname $hostname \
     --createdb --deploy-database  \
@@ -76,7 +79,6 @@ configure_vo_oracle(){
     # Configure voms
 
     voms_configure_cmd="voms-configure install --vo $vo \
-    --admin-port 16000 \
     --core-port 15000 \
     --hostname $hostname \
     --dbtype oracle \
@@ -134,7 +136,6 @@ execute 'yum -y install emi-release'
 # install emi-voms-mysql
 execute "yum -y install $voms_mp"
  
-
 # Setup databases
 if [ "$voms_mp"  = "emi-voms-mysql" ]; then
     setup_mysql_db
@@ -143,6 +144,8 @@ else
     setup_oracle_db
     configure_vo_oracle
 fi
+
+configure_container
 
 # Install INFN CA
 execute "yum -y install ca_INFN-CA-2006"
