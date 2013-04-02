@@ -64,6 +64,9 @@ setup_mysql_db(){
     execute "/usr/bin/mysqladmin -u root -h $hostname password pwd"
 }
 
+configure_container(){
+    execute "sed -i -e \"s#localhost#$hostname#g\" /etc/voms-admin/voms-admin-server.properties"
+}
 configure_oracle_vo(){
 
     cat > site-info.def << EOF
@@ -108,7 +111,6 @@ reconfigure_mysql_vo(){
 hostname=$(hostname -f)
 voms-configure install --vo $vo \
 --core-port 15000 \
---admin-port 16000 \
 --hostname $hostname \
 --dbusername ${vo}_vo \
 --dbpassword pwd \
@@ -126,7 +128,6 @@ hostname=$(hostname -f)
 voms-configure install --vo $vo \
 --dbtype oracle \
 --core-port 15000 \
---admin-port 16000 \
 --hostname $hostname \
 --dbusername admin_25 \
 --dbpassword $oracle_password \
@@ -211,6 +212,8 @@ else
     reconfigure_mysql_vo
 fi
 
+configure_container
+
 execute "sh reconfigure-voms.sh"
 execute "service voms-admin start"
 
@@ -268,8 +271,5 @@ execute "cp /etc/voms-admin/$vo/lsc /etc/grid-security/vomsdir/$vo/$hostname.lsc
 
 # VOMS proxy init test
 execute "echo 'pass' | voms-proxy-init -voms $vo --pwstdin --debug"
-
-# Start vomses service
-execute "service vomses start"
 
 echo "VOMS succesfully upgraded!"
