@@ -203,7 +203,4 @@ for i in `seq 1 10`; do
     execute "voms-proxy-init -voms $vo -noregen"
 done
     
-# Start vomses index application
-execute "service vomses start"
-
 echo "VOMS succesfully deployed!"
