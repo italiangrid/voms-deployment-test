@@ -140,7 +140,7 @@ EOF
 
 execute "mkdir emi-release-package"
 execute "wget -P emi-release-package $emi_release_package"
-execute "yum -y localinstall emi-release-package/*.rpm"
+execute "yum -y localinstall --nogpgcheck emi-release-package/*.rpm"
 execute "yum clean all"
 execute "yum -y install $voms_mp"
 execute "yum -y install xml-commons-apis"
