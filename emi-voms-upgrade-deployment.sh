@@ -1,6 +1,6 @@
 #!/bin/bash
  
-# This script execute an upgrade deployment of the emi-voms-mysql package.
+# This script execute an upgrade deployment of the emi-voms package.
 #
 #
 set -e
@@ -23,6 +23,7 @@ vo=emi3
 yaim_vo=$(echo $vo | tr '.' '_' | tr '-' '_' | tr '[a-z]' '[A-Z]') 
 mail_from=andrea.ceccanti@cnaf.infn.it
 tomcat=$TOMCAT_PACKAGE
+platform=$PLATFORM
 
 [ -z "$emi_release_package" ] && ( echo "Please set the DEFAULT_EMI2_RELEASE_PACKAGE env variable!"; exit 1 )
 [ -z "$emi_repo" ]  && ( echo "Please set the DEFAULT_EMI_REPO env variable!"; exit 1 )
