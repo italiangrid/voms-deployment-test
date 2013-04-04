@@ -60,6 +60,16 @@ configure_container() {
     execute "sed -i -e \"s#localhost#$hostname#g\" /etc/voms-admin/voms-admin-server.properties"
 }
 
+configure_bdii(){
+	echo "Reconfiguring BDII..."
+	cat > /etc/sysconfig/bdii << EOF
+#SLAPD_CONF=/etc/bdii/bdii-slapd.conf
+SLAPD=/usr/sbin/slapd2.4
+#BDII_RAM_DISK=no
+EOF
+	execute "cat /etc/sysconfig/bdii"
+}
+
 configure_vo_mysql(){
     # Configure voms
 
@@ -155,8 +165,7 @@ execute 'voms-config-info-providers -s local -e'
  
 # bdii needs ldap2.4 on SL5
 if [ "$platform" = "SL5" ]; then
-	execute 'sed -i "s/slapd/slapd2.4/g" /etc/sysconfig/bdii'
-	execute 'sed -i "s/^#SLAPD=/SLAPD=/g" /etc/sysconfig/bdii'
+	configure_bdii
 fi
 
 # start bdii
