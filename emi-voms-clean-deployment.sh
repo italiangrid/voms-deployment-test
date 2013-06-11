@@ -35,7 +35,6 @@ setup_mysql_db(){
     execute "sleep 5"
     # Configure root admin account
     execute "mysqladmin -u root password pwd"
-    execute "mysqladmin -u root password pwd"
 }
 
 setup_oracle_db(){
