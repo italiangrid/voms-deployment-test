@@ -62,7 +62,6 @@ setup_mysql_db(){
     execute "service mysqld start"
     execute "sleep 5"
     execute "/usr/bin/mysqladmin -u root password pwd"
-    execute "/usr/bin/mysqladmin -u root -h $hostname password pwd"
 }
 
 configure_container(){
