@@ -182,7 +182,7 @@ if [ "$voms_mp" = "emi-voms-oracle" ]; then
 fi
 
 # wait a while
-execute 'sleep 10'
+execute 'sleep 30'
  
 # check voms-admin can list groups
 execute "voms-admin --vo $vo list-groups"
