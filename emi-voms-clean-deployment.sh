@@ -16,7 +16,7 @@ emi_repo_filename="/etc/yum.repos.d/test_emi.repo"
 voms_repo_filename="/etc/yum.repos.d/test_voms.repo"
 hostname=$(hostname -f)
 
-vo=voms.ci
+vo=vomsci
 mail_from=andrea.ceccanti@cnaf.infn.it
 
 populate_vo_script_url="https://raw.github.com/valerioventuri/voms-deployment-test/master/populate-vo.sh"

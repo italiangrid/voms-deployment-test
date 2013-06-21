@@ -19,7 +19,7 @@ voms_repo_filename="/etc/yum.repos.d/test_voms.repo"
 populate_vo_script_url="https://raw.github.com/valerioventuri/voms-deployment-test/master/populate-vo.sh"
 
 hostname=$(hostname -f)
-vo=voms.ci
+vo=vomsci
 yaim_vo=$(echo $vo | tr '.' '_' | tr '-' '_' | tr '[a-z]' '[A-Z]') 
 mail_from=andrea.ceccanti@cnaf.infn.it
 tomcat=$TOMCAT_PACKAGE
