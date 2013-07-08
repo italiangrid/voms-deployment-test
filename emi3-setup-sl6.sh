@@ -12,6 +12,9 @@ export VOMS_METAPACKAGE=emi-voms-mysql
 export STDCPP_COMPAT_PACKAGE=compat-libstdc++-33
 export TOMCAT_PACKAGE=tomcat6
 
+## Change this to "yes" (lowercase) to check
+## a database upgrade
+export PERFORM_DATABASE_UPGRADE="no"
 # Fill the env below with oracle account password
 # export ORACLE_PASSWORD=
 
