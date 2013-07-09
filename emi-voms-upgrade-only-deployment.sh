@@ -132,6 +132,10 @@ voms-configure install --vo $vo \
 --dbname voms_${vo} \
 --mail-from $mail_from \
 --smtp-host postino.cnaf.infn.it
+
+if [ "$PERFORM_DATABASE_UPGRADE" = "yes" ]; then
+	voms-configure upgrade --vo $vo
+fi
 EOF
 
 }
@@ -149,6 +153,10 @@ voms-configure install --vo $vo \
 --dbname DB_VOMS \
 --mail-from $mail_from \
 --smtp-host postino.cnaf.infn.it
+
+if [ "$PERFORM_DATABASE_UPGRADE" = "yes" ]; then
+	voms-configure upgrade --vo $vo
+fi
 EOF
 }
 
