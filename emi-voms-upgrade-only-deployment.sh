@@ -216,6 +216,10 @@ fi
 # start bdii
 execute 'service bdii start'
 
+# check voms-admin can list groups and users
+execute "voms-admin --vo $vo list-groups"
+execute "voms-admin --vo $vo list-users"
+
 # install voms clients
 execute "yum -y install voms-clients3"
 
