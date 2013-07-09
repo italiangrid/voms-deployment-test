@@ -156,8 +156,6 @@ fi
 
 echo "### VOMS Deployment Test ###"
 
-current_time=`date`
-
 echo "Host: `hostname -f`"
 echo "Date: `date`"
 echo "Environment script: $script_repo/$env_script"	
