@@ -16,7 +16,7 @@ script_repo="https://raw.github.com/italiangrid/voms-deployment-test/master"
 
 boolean_values="yes,no"
 
-ARGS=$(getopt -o c:p:m:r:u -l "component:platform:mode:repo:upgrade" -n "voms-deployment-test.sh" -- "$@")
+ARGS=$(getopt -o c:p:m:r:u: -l "component:platform:mode:repo:upgrade:" -n "voms-deployment-test.sh" -- "$@")
 
 if [ $? -ne 0 ]; then
     echo "No arguments specified"
