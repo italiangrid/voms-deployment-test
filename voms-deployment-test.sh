@@ -25,6 +25,8 @@ fi
 
 eval set -- "$ARGS"	
 
+echo "Parsing args..."
+
 while true;
 do
 	case "$1" in
@@ -59,6 +61,7 @@ do
 		;;
 	esac
 done
+
 
 usage() {	
 	echo
