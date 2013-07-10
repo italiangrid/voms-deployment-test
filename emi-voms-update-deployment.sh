@@ -163,10 +163,6 @@ EOF
 # stop the services
 execute "service voms stop"
 execute "service voms-admin stop"
-#execute "service $tomcat stop"
-
-# remove emi-release package
-#execute "yum -y remove emi-release"
 
 # download EMI 3 repos & VOMS repos
 #execute "wget -q $emi_repo -O $emi_repo_filename"
@@ -175,25 +171,16 @@ if [ ! -z "$voms_repo" ]; then
     execute "echo >> $voms_repo_filename; echo 'priority=1' >> $voms_repo_filename"
 fi
 
-# remove 10.2 Oracle repo in favour of 11.2 that comes with EMI3 testing repo
-if [ "$voms_mp" = "emi-voms-oracle" ]; then
-    execute "rm -f /etc/yum.repos.d/oracle.repo"
-fi
-
 # clean yum
 execute "yum clean all"
 
-execute "yum -y install emi-release"
 execute "yum -y update"
-#execute "yum -y remove $tomcat"
 
 if [ "$voms_mp" = "emi-voms-oracle" ]; then
     reconfigure_oracle_vo
 else
     reconfigure_mysql_vo
 fi
-
-#configure_container
 
 execute "sh reconfigure-voms.sh"
 execute "service voms-admin start"
@@ -212,9 +199,6 @@ execute "sleep 20"
 
 # start bdii
 execute 'service bdii stop'
-
-# configure info providers
-#execute 'voms-config-info-providers -s local -e'
 
 # bdii needs ldap2.4 on SL5
 if [ "$platform" = "SL5" ]; then

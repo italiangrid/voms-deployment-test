@@ -239,6 +239,8 @@ configure_container
 execute "sh reconfigure-voms.sh"
 execute "service voms-admin start"
 
+execute "voms-admin --vo vomsci list-users" 
+
 if [ "$voms_mp" = "emi-voms-oracle" ]; then
     cat > sysconfig.voms << EOF
 VOMS_USER=voms

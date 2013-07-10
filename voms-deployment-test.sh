@@ -129,9 +129,6 @@ if [ "$COMPONENT" = "server" ]; then
 		update)
 			deployment_script="emi-voms-update-deployment.sh"
 			;;
-		update-db)
-			deployment_script="emi-voms-update-deployment.sh"
-			;;
 	esac
 fi
 
