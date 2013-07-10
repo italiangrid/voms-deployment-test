@@ -165,9 +165,6 @@ execute "service voms stop"
 execute "service voms-admin stop"
 #execute "service $tomcat stop"
 
-# workaround for a deployment problem
-execute 'rm -rf /var/tmp/voms-webapp/vomsci'
-
 # remove emi-release package
 #execute "yum -y remove emi-release"
 
