@@ -108,6 +108,7 @@ env_script=""
 # The deployment script
 deployment_script=""
 
+
 case "$PLATFORM" in
 	SL5) 
 		env_script="emi3-setup-sl5.sh"
@@ -124,13 +125,13 @@ esac
 if [ "$COMPONENT" = "server" ]; then
 	case "$MODE" in
 		clean)
-			deployment_script="emi-voms-clean-deployment.sh"
+            deployment_script=( "emi-voms-clean-deployment.sh" )
 			;;
 		upgrade)
-			deployment_script="emi-voms-upgrade-deployment.sh"
+			deployment_script=( "emi-voms-upgrade-deployment.sh" )
 			;;
 		update)
-			deployment_script="emi-voms-update-deployment.sh"
+			deployment_script=( "emi-voms-clean-deployment.sh" "emi-voms-update-deployment.sh" )
 			;;
 	esac
 fi
@@ -139,13 +140,13 @@ if [ "$COMPONENT" = "clients" ]; then
 	case "$MODE" in
 		clean)
 			if [ "$PLATFORM" = "Deb6" ]; then
-				deployment_script="voms-clients-clean-deployment-deb.sh"
+				deployment_script=( "voms-clients-clean-deployment-deb.sh" )
 			else
-				deployment_script="voms-clients-clean-deployment.sh"
+				deployment_script=( "voms-clients-clean-deployment.sh" )
 			fi
 			;;
 		upgrade)
-			deployment_script="voms-clients-upgrade-deployment.sh"
+			deployment_script=( "voms-clients-upgrade-deployment.sh" )
 			;;
 		update)
 			echo "Still unimplemented!"
@@ -159,18 +160,21 @@ echo "### VOMS Deployment Test ###"
 echo "Host: `hostname -f`"
 echo "Date: `date`"
 echo "Environment script: $script_repo/$env_script"	
-echo "Deployment script: $script_repo/$deployment_script"
+echo "Deployment scripts: ${deployment_script[*]}"
 
 echo "Fetching environment script from GITHUB..."
 echo
 wget --no-check-certificate $script_repo/$env_script -O $env_script
 
-echo "Fetching deployment script from GITHUB..."
+echo "Fetching deployment scripts from GITHUB..."
 echo
-wget --no-check-certificate $script_repo/$deployment_script -O $deployment_script
+
+for s in "${deployment_script[@]}"; do
+    wget --no-check-certificate $script_repo/$s -O $s
+    chmod +x $s
+done
 
 source $env_script
-chmod +x ${deployment_script}
 
 if [ -n "$REPO" ]; then
 	echo "Setting custom repo to: $REPO"
@@ -188,4 +192,18 @@ echo "### </Environment> ###"
 
 echo "Starting deployment test"
 echo
-./$deployment_script
+
+if [ "$MODE" == "update" ]; then
+
+    unset DEFAULT_VOMS_REPO
+    echo "Executing ${deployment_script[0]}"
+    ./${deployment_script[0]}
+
+    export DEFAULT_VOMS_REPO=$REPO
+    echo "Executing ${deployment_script[1]}"
+    ./${deployment_script[1]}
+
+else
+
+    echo ${deployment_script[0]}
+fi
