@@ -195,11 +195,12 @@ echo
 
 if [ "$MODE" == "update" ]; then
 
+    SAVED_VOMS_REPO=$DEFAULT_VOMS_REPO
     unset DEFAULT_VOMS_REPO
     echo "Executing ${deployment_script[0]}"
     ./${deployment_script[0]}
 
-    export DEFAULT_VOMS_REPO=$REPO
+    export DEFAULT_VOMS_REPO=$SAVED_VOMS_REPO
     echo "Executing ${deployment_script[1]}"
     ./${deployment_script[1]}
 
