@@ -206,5 +206,6 @@ if [ "$MODE" == "update" ]; then
 
 else
 
-    echo ${deployment_script[0]}
+    echo "Executing ${deployment_script[0]}"
+    ./${deployment_script[0]}
 fi
