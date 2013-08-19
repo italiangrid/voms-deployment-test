@@ -40,37 +40,8 @@ execute() {
   eval "$1" || ( echo "Deployment failed"; exit 1 )
 }
  
-setup_oracle_db(){
-    # Install emi devel oracle repo
-
-    cat > oracle.repo << EOF
-[Oracle]
-name=Oracle Repository (not for distribution)
-baseurl=http://emisoft.web.cern.ch/emisoft/dist/elcaro/oracle-instantclient/10.2.0.4/repo/$oracle_dist
-protect=1
-enabled=1
-priority=2
-gpgcheck=0
-EOF
-    execute "cp oracle.repo /etc/yum.repos.d"
-
-    # Install oracle instantclients
-    execute "yum -y install oracle-instantclient-basic"
-	execute "yum -y install $STDCPP_COMPAT_PACKAGE"
-}
-
-setup_mysql_db(){
-    execute "service mysqld start"
-    execute "sleep 5"
-    execute "/usr/bin/mysqladmin -u root password pwd"
-}
-
-configure_container(){
-    execute "sed -i -e \"s#localhost#$hostname#g\" /etc/voms-admin/voms-admin-server.properties"
-}
 
 configure_bdii(){
-
 	echo "Reconfiguring BDII..."
 
 	cat > /etc/sysconfig/bdii << EOF
@@ -80,44 +51,6 @@ SLAPD=/usr/sbin/slapd2.4
 EOF
 	execute "cat /etc/sysconfig/bdii"
 
-}
-
-configure_oracle_vo(){
-
-    cat > site-info.def << EOF
-VOMS_DB_TYPE="oracle"
-SITE_NAME="voms-certification.cnaf.infn.it"
-VOS="$vo"
-VOMS_HOST=$hostname
-ORACLE_CLIENT="/usr/lib/oracle/10.2.0.4/client64"
-ORACLE_CONNECTION_STRING="(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST = voms-db-02.cr.cnaf.infn.it)(PORT = 1521)))(CONNECT_DATA=(SERVICE_NAME = vomsdb2.cr.cnaf.infn.it)))"
-
-VO_${yaim_vo}_VOMS_PORT=15000
-VO_${yaim_vo}_VOMS_DB_USER=admin_25
-VO_${yaim_vo}_VOMS_DB_PASS=pwd
-
-VOMS_ADMIN_SMTP_HOST=postino.cnaf.infn.it
-VOMS_ADMIN_MAIL=andrea.ceccanti@cnaf.infn.it
-EOF
-    execute "cp site-info.def siteinfo"
-}
-
-configure_mysql_vo(){
-
-    cat > site-info.def << EOF
-MYSQL_PASSWORD="pwd"
-SITE_NAME="voms-certification.cnaf.infn.it"
-VOS="$vo"
-VOMS_HOST=$hostname
-VOMS_DB_HOST='localhost'
-VO_${yaim_vo}_VOMS_PORT=15000
-VO_${yaim_vo}_VOMS_DB_USER=${vo}_vo
-VO_${yaim_vo}_VOMS_DB_PASS=pwd
-VO_${yaim_vo}_VOMS_DB_NAME=voms_${vo}
-VOMS_ADMIN_SMTP_HOST=postino.cnaf.infn.it
-VOMS_ADMIN_MAIL=andrea.ceccanti@cnaf.infn.it
-EOF
-    execute "cp site-info.def siteinfo"
 }
 
 reconfigure_mysql_vo(){
@@ -164,8 +97,6 @@ EOF
 execute "service voms stop"
 execute "service voms-admin stop"
 
-# download EMI 3 repos & VOMS repos
-#execute "wget -q $emi_repo -O $emi_repo_filename"
 if [ ! -z "$voms_repo" ]; then
     execute "wget -q $voms_repo -O $voms_repo_filename"
     execute "echo >> $voms_repo_filename; echo 'priority=1' >> $voms_repo_filename"

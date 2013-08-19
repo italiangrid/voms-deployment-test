@@ -149,8 +149,7 @@ if [ "$COMPONENT" = "clients" ]; then
 			deployment_script=( "voms-clients-upgrade-deployment.sh" )
 			;;
 		update)
-			echo "Still unimplemented!"
-			kill -TERM $TOP_PID
+            deployment_script=( "voms-clients-clean-deployment.sh" "voms-clients-update-deployment.sh" )
 			;;
 	esac
 fi
@@ -194,7 +193,6 @@ echo "Starting deployment test"
 echo
 
 if [ "$MODE" == "update" ]; then
-
     SAVED_VOMS_REPO=$DEFAULT_VOMS_REPO
     unset DEFAULT_VOMS_REPO
     echo "Executing ${deployment_script[0]}"
@@ -205,7 +203,6 @@ if [ "$MODE" == "update" ]; then
     ./${deployment_script[1]}
 
 else
-
     echo "Executing ${deployment_script[0]}"
     ./${deployment_script[0]}
 fi
