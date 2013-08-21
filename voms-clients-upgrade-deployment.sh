@@ -10,7 +10,7 @@ emi_repo_filename="/etc/yum.repos.d/test_emi.repo"
 voms_repo_filename="/etc/yum.repos.d/test_voms.repo"
 
 hostname=$(hostname -f)
-clients_package=
+clients_package=voms-clients3
 
 [ $# -eq 1 ] && clients_package=$1
  
@@ -30,7 +30,7 @@ configure_vomsdir(){
 
 execute "mkdir emi-release-package"
 execute "wget -P emi-release-package $emi_release_package"
-execute "yum -y localinstall emi-release-package/*.rpm"
+execute "yum -y --nogpgcheck localinstall emi-release-package/*.rpm"
 execute "yum clean all"
 execute "yum -y install voms-clients"
 
