@@ -111,6 +111,10 @@ env_script=""
 # The deployment script
 deployment_script=""
 
+# The workdir for this job
+workdir=`mktemp --tmpdir=$PWD voms-deployment.XXXXXXXXXX -d`
+
+pushd $workdir
 
 case "$PLATFORM" in
 	SL5) 

@@ -153,6 +153,8 @@ setup_client_certificate() {
     execute "cp /usr/share/igi-test-ca/test0.key.pem .globus/userkey.pem" 
     execute "chmod 600 .globus/usercert.pem"
     execute "chmod 400 .globus/userkey.pem"
+    export X509_USER_CERT="$PWD/.globus/usercert.pem"
+    export X509_USER_KEY="$PWD/.globus/userkey.pem"
 }
 
 setup_voms_clients_configuration() {
