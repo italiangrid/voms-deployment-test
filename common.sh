@@ -20,6 +20,11 @@ vo=vomsci
 mail_from=andrea.ceccanti@cnaf.infn.it
 populate_vo_script_url="https://raw.github.com/valerioventuri/voms-deployment-test/master/populate-vo.sh"
 
+error_and_exit(){
+    echo $1
+    kill -TERM $TOP_PID
+}
+
 setup_mysql_db(){
     # Start MySQLD
     execute "service mysqld start"

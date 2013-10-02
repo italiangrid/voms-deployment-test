@@ -114,6 +114,8 @@ deployment_script=""
 # The workdir for this job
 workdir=`mktemp --tmpdir=$PWD voms-deployment.XXXXXXXXXX -d`
 
+echo "Workdir: $workdir"
+
 pushd $workdir
 
 case "$PLATFORM" in
@@ -235,3 +237,5 @@ else
     echo "Executing ${deployment_script[0]}"
     ./${deployment_script[0]}
 fi
+
+popd
