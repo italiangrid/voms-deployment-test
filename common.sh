@@ -170,3 +170,8 @@ setup_voms_clients_configuration() {
     execute "mkdir /etc/grid-security/vomsdir/$vo"
     execute "cp /etc/voms-admin/$vo/lsc /etc/grid-security/vomsdir/$vo/$hostname.lsc"
 }
+
+install_cas() {
+    execute "yum -y install igi-test-ca"
+    execute "yum -y install ca_INFN-CA-2006"
+}

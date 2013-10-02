@@ -12,12 +12,14 @@ install_voms_repo
 # Clean yum database
 execute "yum clean all"
 
+install_cas
+
 # install emi-release package
 execute 'yum -y install emi-release'
  
 # install emi-voms-mysql
 execute "yum -y install $voms_mp"
- 
+
 # Setup databases
 if [ "$voms_mp"  = "emi-voms-mysql" ]; then
     setup_mysql_db
@@ -29,8 +31,6 @@ fi
 
 configure_container
 
-# Install INFN CA
-execute "yum -y install ca_INFN-CA-2006"
 
 # Configure info providers
 execute 'voms-config-info-providers -s local -e'
