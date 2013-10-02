@@ -1,88 +1,8 @@
 #!/bin/bash
  
-# This script execute an upgrade deployment of the emi-voms package.
-#
-#
-set -e
+source common.sh
 
-emi_release_package=$DEFAULT_EMI2_RELEASE_PACKAGE
-
-emi_repo=$DEFAULT_EMI_REPO
-voms_repo=$DEFAULT_VOMS_REPO
-voms_mp=$VOMS_METAPACKAGE
-oracle_password=$ORACLE_PASSWORD
-oracle_dist=$ORACLE_DIST
-
-emi_repo_filename="/etc/yum.repos.d/test_emi.repo"
-voms_repo_filename="/etc/yum.repos.d/test_voms.repo"
-
-populate_vo_script_url="https://raw.github.com/valerioventuri/voms-deployment-test/master/populate-vo.sh"
-
-hostname=$(hostname -f)
-vo=vomsci
-yaim_vo=$(echo $vo | tr '.' '_' | tr '-' '_' | tr '[a-z]' '[A-Z]') 
-mail_from=andrea.ceccanti@cnaf.infn.it
-tomcat=$TOMCAT_PACKAGE
-platform=$PLATFORM
-
-[ -z "$emi_release_package" ] && ( echo "Please set the DEFAULT_EMI2_RELEASE_PACKAGE env variable!"; exit 1 )
-[ -z "$emi_repo" ]  && ( echo "Please set the DEFAULT_EMI_REPO env variable!"; exit 1 )
-[ -z "$tomcat" ] && ( echo "Please set the TOMCAT_PACKAGE env variable!"; exit 1)
-
-if [ "$voms_mp" = "emi-voms-oracle" ]; then
-    [ -z "$oracle_password" ] && ( echo "Please set the ORACLE_PASSWORD env variable!"; exit 1)
-    [ -z "$oracle_dist" ] && ( echo "Please set the ORACLE_DIST env variable!"; exit 1)
-fi
-
-execute() {
-  echo "[root@`hostname` ~]# $1"
-  eval "$1" || ( echo "Deployment failed"; exit 1 )
-}
- 
-setup_oracle_db(){
-    # Install emi devel oracle repo
-
-    cat > oracle.repo << EOF
-[Oracle]
-name=Oracle Repository (not for distribution)
-baseurl=http://emisoft.web.cern.ch/emisoft/dist/elcaro/oracle-instantclient/10.2.0.4/repo/$oracle_dist
-protect=1
-enabled=1
-priority=2
-gpgcheck=0
-EOF
-    execute "cp oracle.repo /etc/yum.repos.d"
-
-    # Install oracle instantclients
-    execute "yum -y install oracle-instantclient-basic"
-	execute "yum -y install $STDCPP_COMPAT_PACKAGE"
-}
-
-setup_mysql_db(){
-    execute "service mysqld start"
-    execute "sleep 5"
-    execute "/usr/bin/mysqladmin -u root password pwd"
-}
-
-configure_container(){
-    execute "sed -i -e \"s#localhost#$hostname#g\" /etc/voms-admin/voms-admin-server.properties"
-}
-
-configure_bdii(){
-
-	echo "Reconfiguring BDII..."
-
-	cat > /etc/sysconfig/bdii << EOF
-#SLAPD_CONF=/etc/bdii/bdii-slapd.conf
-SLAPD=/usr/sbin/slapd2.4
-#BDII_RAM_DISK=no
-EOF
-	execute "cat /etc/sysconfig/bdii"
-
-}
-
-configure_oracle_vo(){
-
+create_yaim_configuration_oracle(){
     cat > site-info.def << EOF
 VOMS_DB_TYPE="oracle"
 SITE_NAME="voms-certification.cnaf.infn.it"
@@ -101,8 +21,7 @@ EOF
     execute "cp site-info.def siteinfo"
 }
 
-configure_mysql_vo(){
-
+create_yaim_configuration_mysql(){
     cat > site-info.def << EOF
 MYSQL_PASSWORD="pwd"
 SITE_NAME="voms-certification.cnaf.infn.it"
@@ -136,7 +55,6 @@ if [ "$PERFORM_DATABASE_UPGRADE" = "yes" ]; then
 	voms-configure upgrade --vo $vo
 fi
 EOF
-
 }
 
 reconfigure_oracle_vo(){
@@ -165,18 +83,22 @@ execute "yum -y localinstall --nogpgcheck emi-release-package/*.rpm"
 execute "yum clean all"
 execute "yum -y install $voms_mp"
 execute "yum -y install xml-commons-apis"
-execute "yum -y install ca_INFN-CA-2006"
+
+install_cas
 
 execute "mkdir siteinfo"
 
 if [ "$voms_mp" = "emi-voms-oracle" ]; then
-    setup_oracle_db
-    configure_oracle_vo
+    install_oracle_repo
+    # Install oracle instantclients
+    execute "yum -y install oracle-instantclient-basic"
+    execute "yum -y install $STDCPP_COMPAT_PACKAGE"
+    create_yaim_configuration_oracle
 fi
 
 if [ "$voms_mp" = "emi-voms-mysql" ]; then
     setup_mysql_db
-    configure_mysql_vo
+    create_yaim_configuration_mysql
 fi
 
 execute '/opt/glite/yaim/bin/yaim -c -s siteinfo/site-info.def -n VOMS'
@@ -208,12 +130,8 @@ execute "service $tomcat stop"
 execute "yum -y remove emi-release"
 
 # Download EMI 3 repos & VOMS repos
-execute "wget -q $emi_repo -O $emi_repo_filename"
-
-if [ ! -z "$voms_repo" ]; then
-    execute "wget -q $voms_repo -O $voms_repo_filename"
-    execute "echo >> $voms_repo_filename; echo 'priority=1' >> $voms_repo_filename"
-fi
+install_emi_repo
+install_voms_repo
 
 # Remove 10.2 Oracle repo in favour of 11.2 that comes with EMI3
 # testing repo
@@ -270,27 +188,8 @@ execute 'service bdii start'
 # Install voms clients
 execute "yum -y install voms-clients3"
 
-# Setup certificate for voms-proxy-init test
-execute "mkdir -p .globus"
-execute "cp /usr/share/igi-test-ca/test0.cert.pem .globus/usercert.pem"
-execute "cp /usr/share/igi-test-ca/test0.key.pem .globus/userkey.pem"
-execute "chmod 600 .globus/usercert.pem"
-execute "chmod 400 .globus/userkey.pem"
-
-# Setup vomsdir & vomses
-# Configure lsc and vomses
-# Configure lsc and vomses
-if [ ! -d "/etc/vomses" ]; then
-        execute "mkdir /etc/vomses"
-fi
-
-execute "cp /etc/voms-admin/$vo/vomses /etc/vomses/$vo"
-
-if [ ! -d "/etc/grid-security/vomsdir/$vo" ]; then
-        execute "mkdir /etc/grid-security/vomsdir/$vo"
-fi
-
-execute "cp /etc/voms-admin/$vo/lsc /etc/grid-security/vomsdir/$vo/$hostname.lsc"
+setup_voms_clients_configuration
+setup_client_certificate
 
 # VOMS proxy init test
 execute "echo 'pass' | voms-proxy-init -voms $vo --pwstdin --debug"

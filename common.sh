@@ -10,6 +10,7 @@ voms_repo=$DEFAULT_VOMS_REPO
 
 voms_mp=$VOMS_METAPACKAGE
 oracle_password=$ORACLE_PASSWORD
+oracle_dist=$ORACLE_DIST
 
 test_ca_repo_filename="/etc/yum.repos.d/test_ca.repo"
 emi_repo_filename="/etc/yum.repos.d/test_emi.repo"
@@ -17,8 +18,12 @@ voms_repo_filename="/etc/yum.repos.d/test_voms.repo"
 
 hostname=$(hostname -f)
 vo=vomsci
+yaim_vo=$(echo $vo | tr '.' '_' | tr '-' '_' | tr '[a-z]' '[A-Z]')
 mail_from=andrea.ceccanti@cnaf.infn.it
 populate_vo_script_url="https://raw.github.com/valerioventuri/voms-deployment-test/master/populate-vo.sh"
+
+tomcat=$TOMCAT_PACKAGE
+
 
 error_and_exit(){
     echo $1
@@ -130,6 +135,19 @@ install_emi_repo() {
 
 install_test_ca_repo() {
     execute "wget -q $test_ca_repo -O $test_ca_repo_filename"
+}
+
+install_oracle_repo(){
+    cat > oracle.repo << EOF
+[Oracle]
+name=Oracle Repository (not for distribution)
+baseurl=http://emisoft.web.cern.ch/emisoft/dist/elcaro/oracle-instantclient/10.2.0.4/repo/$oracle_dist
+protect=1
+enabled=1
+priority=2
+gpgcheck=0
+EOF
+    execute "cp oracle.repo /etc/yum.repos.d"
 }
 
 install_voms_repo() {

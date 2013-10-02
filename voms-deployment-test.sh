@@ -176,7 +176,7 @@ if [ "${COMPONENT}" = "api-java" ]; then
             deployment_script=( "voms-api-java-upgrade-deployment.sh" )
             ;;
         update)
-            deployment_script=( "voms-api-java-clean-deployment.sh" "voms-api-java-upgdate-deployment.sh" )
+            deployment_script=( "voms-api-java-clean-deployment.sh" "voms-api-java-update-deployment.sh" )
             ;;
     esac
 fi
