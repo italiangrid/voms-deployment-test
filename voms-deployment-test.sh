@@ -1,4 +1,7 @@
 #!/bin/bash
+# Exit at first error
+set -e
+
 trap "exit 1" TERM
 export TOP_PID=$$
 
@@ -22,7 +25,7 @@ boolean_values="yes,no"
 ARGS=$(getopt -o c:p:m:r:u: -l "component:platform:mode:repo:upgrade:" -n "voms-deployment-test.sh" -- "$@")
 
 if [ $? -ne 0 ]; then
-    echo "No arguments specified"
+  echo "No arguments specified"
   exit 1
 fi
 
@@ -96,7 +99,6 @@ if [ -n $REPO ]; then
 		REPO=""
 	fi
 fi
-
 
 
 [[ $supported_components =~ $COMPONENT ]] || ( echo "Invalid component value: $COMPONENT." && usage )
