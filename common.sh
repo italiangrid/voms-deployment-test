@@ -7,6 +7,7 @@ platform=$PLATFORM
 test_ca_repo=$DEFAULT_TEST_CA_REPO
 emi_repo=$DEFAULT_EMI_REPO
 voms_repo=$DEFAULT_VOMS_REPO
+emi_release_package=$DEFAULT_EMI2_RELEASE_PACKAGE
 
 voms_mp=$VOMS_METAPACKAGE
 oracle_password=$ORACLE_PASSWORD
