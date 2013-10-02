@@ -3,7 +3,7 @@ trap "exit 1" TERM
 export TOP_PID=$$
 
 # Supported components
-supported_components="server, clients, clients3, api-java, api-java3"
+supported_components="server, clients, clients3, api-java"
 
 # Supported platforms
 supported_platforms="SL5, SL6, Deb6"
@@ -13,6 +13,9 @@ supported_modes="clean, upgrade, update"
 
 # Repo from which scripts should be fetched
 script_repo="https://raw.github.com/italiangrid/voms-deployment-test/master"
+
+# Common functions script
+common_script="common.sh"
 
 boolean_values="yes,no"
 
@@ -154,6 +157,24 @@ if [ "$COMPONENT" = "clients" ]; then
 	esac
 fi
 
+if [ "${COMPONENT}" = "api-java" ]; then
+    case "${MODE}" in
+        clean)
+            if [ "$PLATFORM" = "Deb6" ]; then
+                deployment_script= ( "voms-api-java-clean-deployment-deb.sh" )
+            else
+                deployment_script= ( "voms-api-java-clean-deployment.sh" )
+            fi
+            ;;
+        upgrade)
+            deployment_script=( "voms-api-java-upgrade-deployment.sh" )
+            ;;
+        update)
+            deployment_script=( "voms-api-java-clean-deployment.sh" "voms-api-java-upgdate-deployment.sh" )
+            ;;
+    esac
+fi
+
 echo "### VOMS Deployment Test ###"
 
 echo "Host: `hostname -f`"
@@ -164,6 +185,10 @@ echo "Deployment scripts: ${deployment_script[*]}"
 echo "Fetching environment script from GITHUB..."
 echo
 wget --no-check-certificate $script_repo/$env_script -O $env_script
+
+echo "Fetching common functions script from GITHUB..."
+echo
+wget --no-check-certificate $script_repo/$common_script -O $common_script
 
 echo "Fetching deployment scripts from GITHUB..."
 echo
