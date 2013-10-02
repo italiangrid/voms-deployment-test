@@ -161,9 +161,9 @@ if [ "${COMPONENT}" = "api-java" ]; then
     case "${MODE}" in
         clean)
             if [ "$PLATFORM" = "Deb6" ]; then
-                deployment_script= ( "voms-api-java-clean-deployment-deb.sh" )
+                deployment_script=( "voms-api-java-clean-deployment-deb.sh" )
             else
-                deployment_script= ( "voms-api-java-clean-deployment.sh" )
+                deployment_script=( "voms-api-java-clean-deployment.sh" )
             fi
             ;;
         upgrade)
