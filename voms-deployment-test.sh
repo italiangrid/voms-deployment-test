@@ -112,7 +112,7 @@ env_script=""
 deployment_script=""
 
 # The workdir for this job
-workdir=`mktemp --tmpdir=$PWD voms-deployment.XXXXXXXXXX -d`
+workdir=`mktemp -p $PWD voms-deployment.XXXXXXXXXX -d`
 
 echo "Workdir: $workdir"
 
