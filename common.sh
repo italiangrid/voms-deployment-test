@@ -113,7 +113,6 @@ execute() {
 }
 
 print_repo_information() {
-    echo "emi-voms-mysql clean deployment test"
     echo "EMI repo URL: $emi_repo"
     if [ ! -z "$voms_repo" ]; then
         echo "VOMS repo URL: $voms_repo"
