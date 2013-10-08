@@ -184,9 +184,9 @@ setup_client_certificate() {
 setup_voms_clients_configuration() {
     # Setup vomsdir & vomses
     # Configure lsc and vomses
-    execute "mkdir /etc/vomses"
+    execute "mkdir -p /etc/vomses"
     execute "cp /etc/voms-admin/$vo/vomses /etc/vomses/$vo"
-    execute "mkdir /etc/grid-security/vomsdir/$vo"
+    execute "mkdir -p /etc/grid-security/vomsdir/$vo"
     execute "cp /etc/voms-admin/$vo/lsc /etc/grid-security/vomsdir/$vo/$hostname.lsc"
 }
 

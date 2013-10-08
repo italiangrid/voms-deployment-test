@@ -77,6 +77,10 @@ fi
 EOF
 }
 
+## Deployment scripts starts here
+
+install_test_ca_repo
+
 execute "mkdir emi-release-package"
 execute "wget -P emi-release-package $emi_release_package"
 execute "yum -y localinstall --nogpgcheck emi-release-package/*.rpm"
