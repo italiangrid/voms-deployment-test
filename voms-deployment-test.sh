@@ -1,6 +1,6 @@
 #!/bin/bash
 # Exit at first error
-set -e
+set -ex
 
 trap "exit 1" TERM
 export TOP_PID=$$
