@@ -206,7 +206,7 @@ for s in "${deployment_script[@]}"; do
     chmod +x $s
 done
 
-source $env_script
+source ./${env_script}
 
 if [ -n "$REPO" ]; then
 	echo "Setting custom repo to: $REPO"
