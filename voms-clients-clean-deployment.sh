@@ -2,17 +2,12 @@
 set -e
 source common.sh
 
-clients_package=voms-clients3
-
-[ $# -eq 1 ] && clients_package=$1
-
 configure_vomsdir(){
   execute "mkdir -p /etc/grid-security/vomsdir"
   execute "cp /etc/grid-security/hostcert.pem /etc/grid-security/vomsdir"
 }
 
-
-echo "$clients_package clean deployment test"
+echo "voms-clients3 clean deployment test"
 print_repo_information
 echo "EMI repo URL: $emi_repo"
 if [ ! -z "$voms_repo" ]; then
@@ -34,7 +29,7 @@ execute "yum clean all"
 execute 'yum -y install emi-release'
 
 # install voms-clients
-execute "yum -y install $clients_package"
+execute "yum -y install voms-clients3 voms-clients"
 
 # Setup certificate for voms-proxy-init test
 execute "mkdir -p .globus"
@@ -47,5 +42,6 @@ configure_vomsdir
 
 # test basic voms-proxy-init command
 execute "echo 'pass' | voms-proxy-init --pwstdin --cert .globus/usercert.pem --key .globus/userkey.pem"
+execute "echo 'pass' | voms-proxy-init2 --pwstdin --cert .globus/usercert.pem --key .globus/userkey.pem"
 
 echo "VOMS clients succesfully deployed"

@@ -6,7 +6,7 @@ trap "exit 1" TERM
 export TOP_PID=$$
 
 # Supported components
-supported_components="server, clients, clients3, api-java"
+supported_components="server, clients, api-java"
 
 # Supported platforms
 supported_platforms="SL5, SL6, Deb6"
@@ -35,50 +35,50 @@ echo "Parsing args..."
 
 while true;
 do
-	case "$1" in
-		-c | --component)
-		shift
-		COMPONENT="$1"
-		shift
-		;;
-		-p | --platform)
-		shift
-		PLATFORM="$1"
-		shift
-		;;
-		-m | --mode)
-		shift
-		MODE="$1"
-		shift
-		;;
-		-r | --repo)
-		shift
-		REPO="$1"
-		shift
-		;;
-		-u | --upgrade)
-		shift
-		UPGRADE="$1"
-		shift
-		;;
-		--)
-		shift
-		break
-		;;
-	esac
+  case "$1" in
+    -c | --component)
+      shift
+      COMPONENT="$1"
+      shift
+      ;;
+    -p | --platform)
+      shift
+      PLATFORM="$1"
+      shift
+      ;;
+    -m | --mode)
+      shift
+      MODE="$1"
+      shift
+      ;;
+    -r | --repo)
+      shift
+      REPO="$1"
+      shift
+      ;;
+    -u | --upgrade)
+      shift
+      UPGRADE="$1"
+      shift
+      ;;
+    --)
+      shift
+      break
+      ;;
+  esac
 done
 
 
 usage() {	
-	echo
-	echo "usage: voms-deployment-test -c <COMPONENT> -p <PLATFORM> -m <MODE> [-r REPO] [-u UPGRADE]"
-	echo
-	echo "COMPONENT: $supported_components"
-	echo "PLATFORM: $supported_platforms"
-	echo "MODE: $supported_modes"
-	echo "REPO: A repo url to be used instead of the default repo"
-	echo "UPGRADE: Perform database upgrade. (yes/no)"
-	kill -TERM $TOP_PID
+  echo
+  echo "usage: voms-deployment-test -c <COMPONENT> -p <PLATFORM> -m <MODE> [-r REPO] [-u UPGRADE]"
+  echo
+  echo "COMPONENT: $supported_components"
+  echo "PLATFORM: $supported_platforms"
+  echo "MODE: $supported_modes"
+  echo "REPO: A repo url to be used instead of the default repo"
+  echo "UPGRADE: Perform database upgrade. (yes/no)"
+  kill -TERM $TOP_PID
 }
 
 ## Input validation ##
@@ -87,17 +87,17 @@ usage() {
 [[ -z $MODE ]] && echo "Please provide a value for MODE." && usage
 
 if [ -z $UPGRADE ]; then
-	UPGRADE="no"
+  UPGRADE="no"
 fi
 
 if [ -n $UPGRADE ]; then
-	[[ $boolean_values =~ $UPGRADE ]] || ( echo "Invalid upgrade value: $UPGRADE. Expected value: $boolean_values" && usage)
+  [[ $boolean_values =~ $UPGRADE ]] || ( echo "Invalid upgrade value: $UPGRADE. Expected value: $boolean_values" && usage)
 fi
 
 if [ -n $REPO ]; then
-	if [ "$REPO" = "NULL" ]; then
-		REPO=""
-	fi
+  if [ "$REPO" = "NULL" ]; then
+    REPO=""
+  fi
 fi
 
 
@@ -121,66 +121,66 @@ echo "Workdir: $workdir"
 pushd $workdir
 
 case "$PLATFORM" in
-	SL5) 
-		env_script="emi3-setup-sl5.sh"
-		;;
-	SL6)
-		env_script="emi3-setup-sl6.sh"
-		;;
-	Deb6)
-		env_script="emi3-setup-deb.sh"
-		;;
+  SL5) 
+    env_script="emi3-setup-sl5.sh"
+    ;;
+  SL6)
+    env_script="emi3-setup-sl6.sh"
+    ;;
+  Deb6)
+    env_script="emi3-setup-deb.sh"
+    ;;
 esac
 
 
 if [ "$COMPONENT" = "server" ]; then
-	case "$MODE" in
-		clean)
-            deployment_script=( "emi-voms-clean-deployment.sh" )
-			;;
-		upgrade)
-			deployment_script=( "emi-voms-upgrade-deployment.sh" )
-			;;
-		update)
-			deployment_script=( "emi-voms-clean-deployment.sh" "emi-voms-update-deployment.sh" )
-			;;
-	esac
+  case "$MODE" in
+    clean)
+      deployment_script=( "emi-voms-clean-deployment.sh" )
+      ;;
+    upgrade)
+      deployment_script=( "emi-voms-upgrade-deployment.sh" )
+      ;;
+    update)
+      deployment_script=( "emi-voms-clean-deployment.sh" "emi-voms-update-deployment.sh" )
+      ;;
+  esac
 fi
 
 if [ "$COMPONENT" = "clients" ]; then
-	case "$MODE" in
-		clean)
-			if [ "$PLATFORM" = "Deb6" ]; then
-				deployment_script=( "voms-clients-clean-deployment-deb.sh" )
-			else
-				deployment_script=( "voms-clients-clean-deployment.sh" )
-			fi
-			;;
-		upgrade)
-			deployment_script=( "voms-clients-upgrade-deployment.sh" )
-			;;
-		update)
-            deployment_script=( "voms-clients-clean-deployment.sh" "voms-clients-update-deployment.sh" )
-			;;
-	esac
+  case "$MODE" in
+    clean)
+      if [ "$PLATFORM" = "Deb6" ]; then
+        deployment_script=( "voms-clients-clean-deployment-deb.sh" )
+      else
+        deployment_script=( "voms-clients-clean-deployment.sh" )
+      fi
+      ;;
+    upgrade)
+      deployment_script=( "voms-clients-upgrade-deployment.sh" )
+      ;;
+    update)
+      deployment_script=( "voms-clients-clean-deployment.sh" "voms-clients-update-deployment.sh" )
+      ;;
+  esac
 fi
 
 if [ "${COMPONENT}" = "api-java" ]; then
-    case "${MODE}" in
-        clean)
-            if [ "$PLATFORM" = "Deb6" ]; then
-                deployment_script=( "voms-api-java-clean-deployment-deb.sh" )
-            else
-                deployment_script=( "voms-api-java-clean-deployment.sh" )
-            fi
-            ;;
-        upgrade)
-            deployment_script=( "voms-api-java-upgrade-deployment.sh" )
-            ;;
-        update)
-            deployment_script=( "voms-api-java-clean-deployment.sh" "voms-api-java-update-deployment.sh" )
-            ;;
-    esac
+  case "${MODE}" in
+    clean)
+      if [ "$PLATFORM" = "Deb6" ]; then
+        deployment_script=( "voms-api-java-clean-deployment-deb.sh" )
+      else
+        deployment_script=( "voms-api-java-clean-deployment.sh" )
+      fi
+      ;;
+    upgrade)
+      deployment_script=( "voms-api-java-upgrade-deployment.sh" )
+      ;;
+    update)
+      deployment_script=( "voms-api-java-clean-deployment.sh" "voms-api-java-update-deployment.sh" )
+      ;;
+  esac
 fi
 
 echo "### VOMS Deployment Test ###"
@@ -202,20 +202,20 @@ echo "Fetching deployment scripts from GITHUB..."
 echo
 
 for s in "${deployment_script[@]}"; do
-    wget --no-check-certificate $script_repo/$s -O $s
-    chmod +x $s
+  wget --no-check-certificate $script_repo/$s -O $s
+  chmod +x $s
 done
 
 source ./${env_script}
 
 if [ -n "$REPO" ]; then
-	echo "Setting custom repo to: $REPO"
-	export DEFAULT_VOMS_REPO=$REPO
+  echo "Setting custom repo to: $REPO"
+  export DEFAULT_VOMS_REPO=$REPO
 fi
 
 if [ "$UPGRADE" = "yes" ]; then
-	echo "Requiring database upgrade."
-	export PERFORM_DATABASE_UPGRADE="yes"
+  echo "Requiring database upgrade."
+  export PERFORM_DATABASE_UPGRADE="yes"
 fi
 
 echo "### <Environment> ### "
@@ -226,18 +226,18 @@ echo "Starting deployment test"
 echo
 
 if [ "$MODE" == "update" ]; then
-    SAVED_VOMS_REPO=$DEFAULT_VOMS_REPO
-    unset DEFAULT_VOMS_REPO
-    echo "Executing ${deployment_script[0]}"
-    ./${deployment_script[0]}
+  SAVED_VOMS_REPO=$DEFAULT_VOMS_REPO
+  unset DEFAULT_VOMS_REPO
+  echo "Executing ${deployment_script[0]}"
+  ./${deployment_script[0]}
 
-    export DEFAULT_VOMS_REPO=$SAVED_VOMS_REPO
-    echo "Executing ${deployment_script[1]}"
-    ./${deployment_script[1]}
+  export DEFAULT_VOMS_REPO=$SAVED_VOMS_REPO
+  echo "Executing ${deployment_script[1]}"
+  ./${deployment_script[1]}
 
 else
-    echo "Executing ${deployment_script[0]}"
-    ./${deployment_script[0]}
+  echo "Executing ${deployment_script[0]}"
+  ./${deployment_script[0]}
 fi
 
 popd
