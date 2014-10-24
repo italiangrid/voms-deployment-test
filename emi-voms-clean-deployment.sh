@@ -45,8 +45,7 @@ execute 'service bdii start'
 
 run_fetch_crl
 
-# start voms
-execute 'service voms start'
+
 execute 'service voms-admin start'
  
 # wait a while
@@ -64,6 +63,10 @@ execute "yum -y install voms-clients3"
 
 setup_voms_clients_configuration
 setup_client_certificate
+
+# start voms
+execute 'service voms start'
+execute 'sleep 30'
 
 # VOMS proxy init test
 execute "echo 'pass' | voms-proxy-init -voms $vo --pwstdin"
