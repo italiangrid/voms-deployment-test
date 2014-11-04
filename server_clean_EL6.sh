@@ -75,7 +75,7 @@ fetch-crl
 # Start VOMS-admin
 service voms-admin start
 
-let admin_sleep=SLEEP_TIME*10
+let admin_sleep=SLEEP_TIME*6
 sleep ${admin_sleep}
 
 # Check that voms-admin server runs
