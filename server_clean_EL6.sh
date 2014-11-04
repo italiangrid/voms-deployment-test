@@ -39,7 +39,7 @@ sleep ${SLEEP_TIME}
 mysqladmin -uroot password pwd
 
 # Configure VO 0
-voms-configure install --vo ${V0_0_NAME} \
+voms-configure install --vo ${VO_0_NAME} \
   --core-port ${VO_0_PORT} \
   --hostname ${LOCAL_HOSTNAME} \
   --createdb --deploy-database  \
@@ -50,7 +50,7 @@ voms-configure install --vo ${V0_0_NAME} \
   --dbapwd pwd
 
 # Configure VO 1
-voms-configure install --vo ${V0_1_NAME} \
+voms-configure install --vo ${VO_1_NAME} \
   --core-port ${VO_1_PORT} \
   --hostname ${LOCAL_HOSTNAME} \
   --createdb --deploy-database  \
