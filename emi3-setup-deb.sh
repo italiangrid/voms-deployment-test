@@ -1,1 +1,0 @@
-export DEFAULT_EMI_REPO=http://eticssoft.web.cern.ch/eticssoft/pbuilder/emi-3-rc-deb6.list
