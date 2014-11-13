@@ -90,8 +90,8 @@ sh populate-vo.sh ${VO_1_NAME}
 mkdir -p /etc/grid-security/vomsdir/${VO_0_NAME}
 mkdir -p /etc/grid-security/vomsdir/${VO_1_NAME}
 
-cp /etc/voms/${VO_0_NAME}/lsc /etc/grid-security/vomsdir/${VO_0_NAME}/${LOCAL_HOSTNAME}.lsc
-cp /etc/voms/${VO_1_NAME}/lsc /etc/grid-security/vomsdir/${VO_1_NAME}/${LOCAL_HOSTNAME}.lsc
+cp /etc/voms-admin/${VO_0_NAME}/lsc /etc/grid-security/vomsdir/${VO_0_NAME}/${LOCAL_HOSTNAME}.lsc
+cp /etc/voms-admin/${VO_1_NAME}/lsc /etc/grid-security/vomsdir/${VO_1_NAME}/${LOCAL_HOSTNAME}.lsc
 
 service voms start
 sleep ${SLEEP_TIME}
