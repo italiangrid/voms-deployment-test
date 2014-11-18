@@ -95,8 +95,6 @@ cp /etc/voms-admin/${VO_1_NAME}/lsc /etc/grid-security/vomsdir/${VO_1_NAME}/${LO
 service voms start
 sleep ${SLEEP_TIME}
 
-echo "Done."
-
 # install voms repo
 wget $WGET_OPTIONS $VOMS_REPO -O /etc/yum.repos.d/voms.repo
 
@@ -142,3 +140,5 @@ fi
 # Restart the VOMS services
 service voms restart
 service voms-admin restart
+
+echo "Done."
