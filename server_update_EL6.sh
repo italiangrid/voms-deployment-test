@@ -111,7 +111,6 @@ fi
 voms-configure install --vo ${VO_0_NAME} \
   --core-port ${VO_0_PORT} \
   --hostname ${LOCAL_HOSTNAME} \
-  --createdb --deploy-database  \
   --dbusername ${VO_0_NAME} \
   --dbpassword pwd \
   --mail-from ${MAIL_FROM} \
@@ -126,7 +125,6 @@ fi
 voms-configure install --vo ${VO_1_NAME} \
   --core-port ${VO_1_PORT} \
   --hostname ${LOCAL_HOSTNAME} \
-  --createdb --deploy-database  \
   --dbusername ${VO_1_NAME} \
   --dbpassword pwd \
   --mail-from ${MAIL_FROM} \
