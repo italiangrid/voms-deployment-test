@@ -66,6 +66,9 @@ sed -i -e "s#localhost#${LOCAL_HOSTNAME}#g" /etc/voms-admin/voms-admin-server.pr
 # Configure info providers
 voms-config-info-providers -s local -e
 
+# Sleep more in bdii init script to avoid issues on docker
+sed -i 's/sleep 2/sleep 5/' /etc/init.d/bdii
+
 # Start BDII
 service bdii start
 
