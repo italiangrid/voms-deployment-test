@@ -47,6 +47,11 @@ configure_vos(){
     --dbapwd pwd
 }
 
+upgrade_db() {
+  voms-configure upgrade --vo ${VO_1_NAME}
+  voms-configure upgrade --vo ${VO_2_NAME}
+}
+
 # install emi gpg key
 rpm --import ${EMI_GPG_KEY}
 
