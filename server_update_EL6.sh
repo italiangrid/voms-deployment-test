@@ -20,7 +20,7 @@ EMI_RELEASE_PACKAGE=${EMI_RELEASE_PACKAGE:-emi-release-3.0.0-2.el6.noarch.rpm}
 EMI_RELEASE_PACKAGE_URL="http://emisoft.web.cern.ch/emisoft/dist/EMI/3/sl6/x86_64/base/${EMI_RELEASE_PACKAGE}"
 EMI_GPG_KEY=${EMI_GPG_KEY:-http://emisoft.web.cern.ch/emisoft/dist/EMI/3/RPM-GPG-KEY-emi}
 
-DO_RECONF=${DO_RECONF:-false}
+DO_RECONF=${DO_RECONF:-true}
 DO_DB_UPGRADE=${DO_DB_UPGRADE:-true}
 
 configure_vos(){
@@ -48,8 +48,8 @@ configure_vos(){
 }
 
 upgrade_db() {
+  voms-configure upgrade --vo ${VO_0_NAME}
   voms-configure upgrade --vo ${VO_1_NAME}
-  voms-configure upgrade --vo ${VO_2_NAME}
 }
 
 # install emi gpg key
