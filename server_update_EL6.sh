@@ -123,12 +123,12 @@ service voms-admin stop
 service voms stop
 sleep ${SLEEP_TIME}
 
-if [ ${DO_RECONF} = true ]; then
-  configure_vos
-fi
-
 if [ ${DO_DB_UPGRADE} = true ]; then
   upgrade_db
+fi
+
+if [ ${DO_RECONF} = true ]; then
+  configure_vos
 fi
 
 # Restart VOMS Admin
