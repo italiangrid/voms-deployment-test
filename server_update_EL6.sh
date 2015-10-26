@@ -122,7 +122,7 @@ if [ ${DO_RECONF} = true ]; then
   configure_vos
 fi
 
-if [ ${DO_DB_UPGRADE} = true]; then
+if [ ${DO_DB_UPGRADE} = true ]; then
   upgrade_db
 fi
 
