@@ -33,6 +33,11 @@ wget $WGET_OPTIONS $VOMS_REPO -O /etc/yum.repos.d/voms.repo
 yum clean all
 yum -y install emi-voms-mysql
 
+## This is due do a bug in fetch-crl package, that does
+## not provide PERL::LWP. Remove the line below when
+## this is fixed
+yum install -y perl-libwww-perl
+
 # Startup mysql
 service mysqld start
 sleep ${SLEEP_TIME}
