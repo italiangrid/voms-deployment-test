@@ -55,10 +55,6 @@ upgrade_db() {
 # install emi gpg key
 rpm --import ${EMI_GPG_KEY}
 
-# install emi-release package
-wget $WGET_OPTIONS ${EMI_RELEASE_PACKAGE_URL}
-yum localinstall -y ${EMI_RELEASE_PACKAGE}
-
 yum clean all
 
 # install VOMS release in EMI repository
