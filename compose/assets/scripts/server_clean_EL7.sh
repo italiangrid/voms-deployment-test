@@ -2,8 +2,13 @@
 set -ex
 trap "exit 1" TERM
 
-WGET_OPTIONS="--no-check-certificate"
-VOMS_REPO=${VOMS_REPO:-http://radiohead.cnaf.infn.it:9999/view/REPOS/job/repo_voms_develop_SL6/lastSuccessfulBuild/artifact/voms-develop_sl6.repo}
+WGET_OPTIONS=${WGET_OPTIONS:-}
+
+TEST_CA_REPO_URL=${TEST_CA_REPO_URL:-https://ci.cloud.cnaf.infn.it/view/repos/job/repo_test_ca/lastSuccessfulBuild/artifact/test-ca.repo}
+VOMS_EXTERNALS_REPO_URL=${VOMS_EXTERNALS_REPO_URL:-https://italiangrid.github.io/voms-repo/repofiles/rhel/voms-externals-el7.repo}
+VOMS_REPO_URL=${VOMS_REPO_URL:-https://italiangrid.github.io/voms-repo/repofiles/rhel/voms-beta-el7.repo}
+
+LOCAL_HOSTNAME=${VOMS_HOSTNAME:-hostname -f}
 
 VO_0_NAME=${VO_0_NAME:-vo.0}
 VO_1_NAME=${VO_1_NAME:-vo.1}
@@ -12,29 +17,30 @@ VO_0_PORT=${VO_0_PORT:-15000}
 VO_1_PORT=${VO_1_PORT:-15001}
 
 MAIL_FROM=${MAIL_FROM:-andrea.ceccanti@cnaf.infn.it}
-SMTP_HOST=${SMTP_HOST:-postino.cnaf.infn.it}
-LOCAL_HOSTNAME=$(hostname -f)
+SMTP_HOST=${SMTP_HOST:-mailhog}
+
 SLEEP_TIME=${SLEEP_TIME:-5}
 
-EMI_RELEASE_PACKAGE=${EMI_RELEASE_PACKAGE:-emi-release-3.0.0-2.el6.noarch.rpm}
-EMI_RELEASE_PACKAGE_URL="http://emisoft.web.cern.ch/emisoft/dist/EMI/3/sl6/x86_64/base/${EMI_RELEASE_PACKAGE}"
-EMI_GPG_KEY=${EMI_GPG_KEY:-http://emisoft.web.cern.ch/emisoft/dist/EMI/3/RPM-GPG-KEY-emi}
+# install igi-test-ca repo
+wget ${WGET_OPTIONS} ${TEST_CA_REPO_URL} -O /etc/yum.repos.d/igi-test-ca.repo
 
-# install voms repo
-wget $WGET_OPTIONS $VOMS_REPO -O /etc/yum.repos.d/voms.repo
+# install voms repos
+wget ${WGET_OPTIONS} ${VOMS_EXTERNALS_REPO_URL} -O /etc/yum.repos.d/voms-externals-el7.repo
+wget ${WGET_OPTIONS} ${VOMS_REPO_URL} -O /etc/yum.repos.d/voms.repo
 
 yum clean all
-yum -y install emi-voms-mysql
-
-## This is due do a bug in fetch-crl package, that does
-## not provide PERL::LWP. Remove the line below when
-## this is fixed
-yum install -y perl-libwww-perl
+yum -y install voms-mysql-mp igi-test-ca
 
 # Startup mysql
-service mysqld start
+systemctl start mariadb
 sleep ${SLEEP_TIME}
 mysqladmin -uroot password pwd
+
+# Setup host certificate
+cp /certs/cert.pem /etc/grid-security/hostcert.pem
+cp /certs/key.pem /etc/grid-security/hostkey.pem
+chmod 644 /etc/grid-security/hostcert.pem
+chmod 400 /etc/grid-security/hostkey.pem
 
 # Configure VO 0
 voms-configure install --vo ${VO_0_NAME} \
@@ -74,14 +80,11 @@ service bdii start
 fetch-crl
 
 # Start VOMS-admin
-service voms-admin start
-
-let admin_sleep=SLEEP_TIME*6
-sleep ${admin_sleep}
-
-# Check that voms-admin server runs
-voms-admin --vo $VO_0_NAME list-groups
-voms-admin --vo $VO_1_NAME list-groups
+voms-vo-ctl deploy ${VO_0_NAME}
+voms-vo-ctl deploy ${VO_1_NAME}
+systemctl start voms-admin 
+./wait-for-it.sh -h dev.local.io -p 8443 -t 60 --  voms-admin --vo ${VO_0_NAME} list-groups
+voms-admin --vo ${VO_1_NAME} list-groups
 
 # Populate VOs
 sh populate-vo.sh ${VO_0_NAME}
@@ -94,7 +97,10 @@ mkdir -p /etc/grid-security/vomsdir/${VO_1_NAME}
 cp /etc/voms-admin/${VO_0_NAME}/lsc /etc/grid-security/vomsdir/${VO_0_NAME}/${LOCAL_HOSTNAME}.lsc
 cp /etc/voms-admin/${VO_1_NAME}/lsc /etc/grid-security/vomsdir/${VO_1_NAME}/${LOCAL_HOSTNAME}.lsc
 
-service voms start
-sleep ${SLEEP_TIME}
+systemctl start voms@${VO_0_NAME}
+systemctl start voms@${VO_1_NAME}
+
+./wait-for-it.sh -h dev.local.io -p 15000 -t 60 -- echo "VOMS daemon running for VO ${VO_0_NAME}"
+./wait-for-it.sh -h dev.local.io -p 15001 -t 60 -- echo "VOMS daemon running for VO ${VO_1_NAME}"
 
 echo "Done."

@@ -1,0 +1,39 @@
+version: '3.5'
+
+volumes:
+  sync:
+
+services:
+  testsuite:
+    image: italiangrid/voms-testsuite-centos7
+
+    environment:
+      VOMS_HOSTNAME: dev.local.io
+      SYNC_FILE: /sync/start-ts
+      ROBOT_OPTS: --exclude myproxy
+
+    volumes:
+      - sync:/sync
+
+  voms:
+    image: italiangrid/voms-deployment-test-centos7
+
+    environment:
+      VOMS_HOSTNAME: dev.local.io
+      SYNC_FILE: /sync/start-ts
+
+    volumes:
+      - sync:/sync
+      - ./assets/scripts:/scripts
+      - ./assets/certs/:/certs
+
+    ports:
+      - "8443:8443"
+      - "15000:15000"
+
+    privileged: true
+
+    networks:
+      default:
+        aliases:
+          - dev.local.io
