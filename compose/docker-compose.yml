@@ -33,6 +33,7 @@ services:
     ports:
       - "8443:8443"
       - "15000:15000"
+      - "15001:15001"
 
     privileged: true
 
